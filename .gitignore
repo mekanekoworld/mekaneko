@@ -5,3 +5,4 @@ secrets.env
 *.env
 chat.json
 .DS_Store
+.impeccable/
