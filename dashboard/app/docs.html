@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docs · MEKANEKO</title>
+<meta name="description" content="MEKANEKO whitepaper: fifteen AI agents for research before you launch, Nekopult fair launches on Robinhood Chain, $MEKANEKO, roadmap and FAQ. English and Japanese.">
+<meta property="og:title" content="MEKANEKO Docs">
+<meta property="og:image" content="/mekaneko/ogp.jpg">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/app/app.css">
+<link rel="stylesheet" href="/app/docs.css">
+</head>
+<body>
+<header id="mk-head"></header>
+<!-- Two complete versions of the whitepaper, English and Japanese; the script keeps the one for the page's language
+     (/en/docs/ or /ja/docs/) and removes the other, so section ids stay unique. Keep both versions in step. -->
+<div class="dc" data-doc-lang="en">
+  <aside class="dc-toc" aria-label="Contents">
+    <p class="dc-toc-h">CONTENTS</p>
+    <nav>
+      <a href="#abstract">Abstract</a><a href="#problem">Problem and solution</a><a href="#agents">The 15 agents</a><a href="#access">Agent access</a>
+      <a href="#nekopult">Nekopult</a><a href="#world">MEKANEKO WORLD</a><a href="#tokenomics">$MEKANEKO</a><a href="#roadmap">Roadmap</a>
+      <a href="#security">Security</a><a href="#faq">FAQ</a><a href="#risks">Risks</a><a href="#links">Official links</a>
+    </nav>
+  </aside>
+
+  <main class="dc-main">
+    <header class="dc-top">
+      <p class="dc-eyebrow">MEKANEKO DOCS · WHITEPAPER · DRAFT v0.2 · 20 NOV 2026</p>
+      <h1 class="display">WHITEPAPER</h1>
+      <p class="dc-lede">One stop for everything on-chain: fifteen AI agents for research before you launch or buy, and Nekopult, a fair meme coin launchpad on Robinhood Chain.</p>
+      <p class="dc-note">Working draft. Tokenomics and fees are proposals until the Nekopult contracts and their audit are done. No launch date is announced here.</p>
+    </header>
+
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p>MEKANEKO puts a crew of specialist AI agents behind every launch. They read live market and on-chain data, explain risks in plain words and draft a launch plan. Then Nekopult starts every coin on the same public bonding curve. The user signs every transaction from their own wallet; MEKANEKO never holds keys.</p>
+      <p>The story behind it: long ago, the cat missed the zodiac race, so the cat built a new one. Meka-kun, a cyborg cat from Tokyo, leads fifteen animal agents, each with a single job. MEKANEKO WORLD, a 3D experience in the browser, carries the brand and the story. The community lives on Discord.</p>
+    </section>
+
+    <section id="problem">
+      <h2>Problem and solution</h2>
+      <p>Meme coins launch in seconds, but deciding well still takes hours of research that most people skip. MEKANEKO brings the research to the launch.</p>
+      <div class="md-table"><table>
+        <thead><tr><th>Problem</th><th>What usually happens</th><th>What MEKANEKO does</th></tr></thead>
+        <tbody>
+          <tr><td>Launching blind</td><td>A name and an image go live with no idea whether the narrative has pull</td><td>NEZU and KONKON check trends and plan the angle before launch</td></tr>
+          <tr><td>Unchecked contracts</td><td>Buyers trust a ticker without reading what the token can do</td><td>SHURU reads what the chain shows and flags risks in plain words</td></tr>
+          <tr><td>Unfair starts</td><td>Presales and private allocations let insiders in early</td><td>Every coin starts on the same public curve, no presale</td></tr>
+          <tr><td>Drained wallets</td><td>Bots and "helpers" ask users to connect or share a seed phrase</td><td>Agents only prepare; users sign every transaction themselves</td></tr>
+          <tr><td>Noise</td><td>Thousands of new tokens a day, no time to watch them</td><td>KOKEKO summarises the market and alerts on what you follow</td></tr>
+        </tbody>
+      </table></div>
+      <p>Three rules follow: <strong>research first, launch fair, keep your keys.</strong></p>
+    </section>
+
+    <section id="agents">
+      <h2>The 15 agents</h2>
+      <p>Each agent has its own tools and instructions. Ask in plain words; RYUJIN routes the question, and agents call each other when one answer is not enough. They answer from live data and say what they could not check.</p>
+      <div class="md-table"><table>
+        <thead><tr><th>Agent</th><th>Job</th><th>Live tools</th></tr></thead>
+        <tbody>
+          <tr><td><b>RYUJIN</b> · Dragon</td><td>Agent commander: routes questions, combines answers</td><td>Other agents, market trends, Nekopult tokens, web</td></tr>
+          <tr><td><b>NEZU</b> · Rat</td><td>Trend scout: narratives before they trend</td><td>Market trends, new pools, token search, web</td></tr>
+          <tr><td><b>KONKON</b> · Kitsune</td><td>Strategy: angle and timing of a launch</td><td>Market trends, token data, web</td></tr>
+          <tr><td><b>SHURU</b> · Snake</td><td>Security audit: token risks in plain words</td><td>On-chain token reads, market data, web</td></tr>
+          <tr><td><b>KOKEKO</b> · Rooster</td><td>News and alerts: what moved and why</td><td>Web, watchlist, token data</td></tr>
+          <tr><td><b>NISHIKI</b> · Koi</td><td>Launch guide: drafts the launch on Nekopult</td><td>Launch draft, Nekopult tokens, token search, web</td></tr>
+          <tr><td><b>TORAMARU</b> · Tiger</td><td>Trade execution: prepares trades for you to sign</td><td>Token data, wallet balances, trade preparation</td></tr>
+          <tr><td><b>KAERU</b> · Frog</td><td>Treasury: balances, runway, holdings</td><td>Wallet balances, token data, watchlist</td></tr>
+          <tr><td><b>PYON</b> · Rabbit</td><td>Fast automation: watches lists and conditions</td><td>Watchlist, token data, chain status</td></tr>
+          <tr><td><b>GYUDON</b> · Ox</td><td>Infrastructure: chain health, contract reads</td><td>Chain status, on-chain token reads</td></tr>
+          <tr><td><b>HAYATE</b> · Horse</td><td>Cross-chain: moving funds to Robinhood Chain</td><td>Web, chain status, wallet balances</td></tr>
+          <tr><td><b>UKKI</b> · Monkey</td><td>Coding: scripts and calculations</td><td>Code execution</td></tr>
+          <tr><td><b>CHOTOTSU</b> · Boar</td><td>Growth and marketing: launch campaigns</td><td>Web, token data, Nekopult tokens</td></tr>
+          <tr><td><b>MEEMEE</b> · Goat</td><td>Community and memes: names, lore, meme ideas</td><td>Web, Nekopult tokens</td></tr>
+          <tr><td><b>HACHI</b> · Dog</td><td>User support: how MEKANEKO works</td><td>Web, chain status, Nekopult tokens</td></tr>
+        </tbody>
+      </table></div>
+      <p>Data sources: Robinhood Chain RPC (chain 4663), GeckoTerminal, DexScreener, web search and a code sandbox. Agents never hold keys, never ask for a seed phrase and never send a transaction. The agents run on Anthropic's Claude models with the key kept on the server.</p>
+    </section>
+
+    <section id="access">
+      <h2>Agent access</h2>
+      <p>The agents work in two places, with two different doors.</p>
+      <div class="md-table"><table>
+        <thead><tr><th>Where</th><th>Who</th><th>What you get</th></tr></thead>
+        <tbody>
+          <tr><td>Discord server</td><td>Every member, free</td><td>Six agents already at work: levels and rewards (PYON), FAQ and welcomes (HACHI), address checks and scam watch (SHURU), news and X posts (KOKEKO), fortunes and meme contests (MEEMEE), the agent roster (RYUJIN). Ask anything with <code>/ask</code>: 5 free questions a day, 10 from level 10.</td></tr>
+          <tr><td>Website agent console</td><td>Everyone, free</td><td>All fifteen agents with their full tools, 5 free questions a day per visitor. At launch, wallets holding at least <b>100 $MEKANEKO</b> get more: sign a message with your wallet (it cannot move funds) and the console checks your $MEKANEKO balance on Robinhood Chain.</td></tr>
+        </tbody>
+      </table></div>
+      <p><a href="agents/" data-lang-link="/agents/">See the agent console</a> · <a href="https://discord.gg/42sGtf5Xx2" target="_blank" rel="noopener">Join the Discord</a></p>
+    </section>
+
+    <section id="nekopult">
+      <h2>Nekopult launchpad</h2>
+      <p>A meme coin launchpad on Robinhood Chain (chain ID 4663, gas in ETH). Every coin starts the same way, on a public bonding curve. The contracts are not built yet; the mechanics below are the design they will follow, and the page shows demo coins until then. <a href="nekopult/" data-lang-link="/nekopult/">Open Nekopult</a>.</p>
+      <ol class="dc-steps">
+        <li><b>Prepare.</b> Ask NEZU for the narrative, SHURU for risks, NISHIKI for a launch draft.</li>
+        <li><b>Launch.</b> Sign one transaction. The coin is created with a fixed supply on its bonding curve. No presale, no private allocation.</li>
+        <li><b>Trade on the curve.</b> The price rises with each buy and falls with each sell, by the same formula for every coin.</li>
+        <li><b>Graduate.</b> When the curve sells out, the collected ETH and the remaining tokens become DEX liquidity and the coin trades freely.</li>
+      </ol>
+      <div class="md-table"><table>
+        <thead><tr><th>Fee (proposal)</th><th>Rate</th><th>Goes to</th></tr></thead>
+        <tbody>
+          <tr><td>Trade on the curve</td><td>1% of each buy and sell</td><td>0.5% treasury · 0.3% coin creator · 0.2% agent credits pool</td></tr>
+          <tr><td>Coin creation</td><td>Gas only</td><td>Network</td></tr>
+          <tr><td>Graduation</td><td>Fixed ETH amount, to be set</td><td>Treasury, to cover liquidity setup</td></tr>
+        </tbody>
+      </table></div>
+      <p>Contracts go to Robinhood Chain testnet (46630) first, then an independent audit published before any mainnet launch. The contract source will be verified on the Robinhood Chain explorer (Blockscout) and published on GitHub, so anyone can read exactly what runs.</p>
+    </section>
+
+    <section id="world">
+      <h2>MEKANEKO WORLD and the lore</h2>
+      <p>A 3D experience in the browser, no download and no wallet needed: boot Meka-kun, slap stickers, walk the museum of all fifteen agents, hear the chant at the monument, dance in a neon alley and run through seven worlds. <a href="world/" data-lang-link="/world/">Play MEKANEKO WORLD</a>.</p>
+      <p>Long ago the twelve animals raced to join the zodiac, and the cat missed it. Centuries later, in Tokyo, a cyborg cat called Meka-kun decided not to ask for a place but to build a new zodiac: fifteen animal agents, each with a single job, working for everyone who launches on-chain.</p>
+    </section>
+
+    <section id="tokenomics">
+      <h2>$MEKANEKO</h2>
+      <p>The ticker is <b>$MEKANEKO</b>. It launches as a pure fair launch on <b>Pons</b>, the bonding-curve launchpad on Robinhood Chain. Pons mints the whole fixed supply of <b>1,000,000,000</b> straight into the curve: no presale, no team allocation, and no minting, freezing or blacklisting after launch. Everyone buys on the same public curve. When the curve fills, $MEKANEKO graduates to a Uniswap v4 pool whose liquidity Pons locks permanently. Nekopult, MEKANEKO's own launchpad, opens later, after its audit. Nothing here is final until reviewed by a lawyer.</p>
+      <div class="md-table"><table>
+        <thead><tr><th>Share of the 1,000,000,000 supply</th><th>$MEKANEKO on Pons</th></tr></thead>
+        <tbody>
+          <tr><td>Sold on the Pons bonding curve</td><td>about 71% (5/7)</td></tr>
+          <tr><td>Uniswap v4 pool at graduation, liquidity locked permanently</td><td>about 20%</td></tr>
+          <tr><td>Held in the Pons locker, permanently</td><td>about 8%</td></tr>
+          <tr><td>Team, treasury, presale or private sale</td><td>0%</td></tr>
+        </tbody>
+      </table></div>
+      <p>The shares are Pons v2's fixed launch rules, as published by Pons and Bitquery. If team members buy, they buy on the curve like everyone else, from wallets listed on the verification page before launch.</p>
+      <p>Holding at least <b>100 $MEKANEKO</b> raises your daily agent questions on the website, and holders get a voice in off-chain votes on what gets built next. $MEKANEKO carries no promise of profit, revenue or ownership.</p>
+    </section>
+
+    <section id="roadmap">
+      <h2>Roadmap</h2>
+      <p>The roadmap follows the ten chapters of MEKANEKO WORLD, from BOOT to LOGO. MEKANEKO is in season 0 now. Launch opens season 1, and season 2 may arrive with it. Seasons 3 to 9 are the plan ahead: each one starts when the team announces it, and its details can still change. No dates are promised.</p>
+      <ol class="dc-road">
+        <li class="done"><span>Built</span><p>MEKANEKO WORLD and its film · agent console on live data · Nekopult interface (demo data) · Robinhood Chain connection and wallet connect</p></li>
+        <li class="now"><span>S0 · BOOT (now)</span><p>All fifteen agents live on the website and in Discord, with free daily questions · Discord community and Telegram channel · official X account · public GitHub repository · status and verification pages · faster way into the app · Terms of Service and legal review</p></li>
+        <li><span>S1 · VOLT (launch)</span><p>$MEKANEKO fair launch on Pons, Robinhood Chain: the contract address appears on the website, X, Discord and Telegram at the same moment · wallet sign-in with a signature that cannot move funds · holders of 100 $MEKANEKO or more get more agent questions · SHURU contract checks and a KOKEKO alert channel</p></li>
+        <li><span>S2 · MUSEUM (with or soon after launch)</span><p>Every agent with its full tools and its own voice · The Record: a public report card of each agent's calls · live numbers on the agents' plaques in the MEKANEKO WORLD museum</p></li>
+        <li class="gate"><span>Gate · Nekopult audit report published</span></li>
+        <li><span>S3 · MONUMENT (planned)</span><p>Nekopult v1 live: launch a coin in one transaction · trading fees collected automatically, creators claim theirs from a creator desk · a "Born on Nekopult" badge and a SHURU safety stamp on every coin · launch from X and Telegram</p></li>
+        <li><span>S4 · NEON (planned)</span><p>TORAMARU trades signed in your own wallet · recurring buys, limit and take-profit orders · an opt-in agent wallet with spending limits · PYON autopilot and wallet protection alerts for holders</p></li>
+        <li><span>S5 · POSTER (planned)</span><p>Neko Quest Board: bounties paid for real work (art, video, translations, bug reports), never for likes · a content engine with CHOTOTSU and MEEMEE · Market Omikuji everywhere and a Sticker Passport · a live launch billboard inside MEKANEKO WORLD</p></li>
+        <li><span>S6 · BREAKOUT (planned)</span><p>MEKANEKO for other agents: MCP server, CLI and REST API · pay-per-call SHURU checks for other apps and agents · on-chain identity and reputation for the fifteen agents · Neko Credits for use beyond the daily quota</p></li>
+        <li><span>S7 · STYLE RUN (planned)</span><p>The Great Zodiac Race: a weekly paper-trading league with a leaderboard in the 3D world · a Zodiac Council where the agents debate before you buy · agent voices and a weekly Meka-kun recap video</p></li>
+        <li><span>S8 · SHATTER (planned)</span><p>HAYATE bridges and trades across Base, Arbitrum and Solana · optional: a tokenized-stock desk and perpetuals from chat, only after real-money testing</p></li>
+        <li><span>S9 · LOGO (planned)</span><p>A public treasury with every inflow and outflow on-chain · holder votes on what comes next · Telegram Mini App, a browser extension, a mobile app, and MEKANEKO OS in the boot terminal</p></li>
+      </ol>
+    </section>
+
+    <section id="security">
+      <h2>Security and non-custodial principles</h2>
+      <ul>
+        <li><b>No keys, no seed phrases.</b> Agents cannot sign. Nothing in MEKANEKO asks for a seed phrase or private key, and support never will.</li>
+        <li><b>Sign-in by signature.</b> Wallet sign-in uses a message signature, which proves ownership and cannot move funds.</li>
+        <li><b>Prepared, not executed.</b> Trades and launches are prepared by agents; your wallet shows exactly what happens before you sign.</li>
+        <li><b>Server-side secrets.</b> AI and data provider keys live only on the server.</li>
+        <li><b>Audited, verified contracts.</b> Testnet first, independent audit published before mainnet, source verified on the explorer, bug bounty at mainnet.</li>
+        <li><b>Honest AI.</b> Agents cite their sources and say what they could not verify. Their answers are information, not advice.</li>
+      </ul>
+    </section>
+
+    <section id="faq">
+      <h2>FAQ</h2>
+      <details><summary>Are the agents real?</summary><p>Yes. They run on Anthropic's Claude models and use live data from Robinhood Chain, GeckoTerminal, DexScreener and the web, and they show which tools they used. Six of them already work in our Discord.</p></details>
+      <details><summary>Can the agents trade for me?</summary><p>No. They can prepare a trade or a launch, but only you can sign it, in your own wallet.</p></details>
+      <details><summary>Do I need a wallet?</summary><p>No. The agents are free on Discord and on the website, with a daily limit. At launch, wallets holding at least 100 $MEKANEKO get more questions.</p></details>
+      <details><summary>Why Robinhood Chain?</summary><p>A fast, low-cost chain with gas in ETH and a growing meme and trading scene. Nekopult and the agents are built for it first.</p></details>
+      <details><summary>How is a Nekopult launch fair?</summary><p>Every coin starts on the same public bonding curve, with no presale and no private allocation.</p></details>
+      <details><summary>Is $MEKANEKO an investment?</summary><p>No. It is a meme and utility token for agent access and community votes, with no promise of profit. Its price can go to zero.</p></details>
+      <details><summary>What is the contract address?</summary><p>Only the one in #official-links on our Discord and on the COPY CA button of mekaneko.com and this dashboard (and in our pinned X post once our X account is live). If they do not all match, do not buy.</p></details>
+      <details><summary>Will the team DM me?</summary><p>No. We never DM first, never run presales in DMs and never ask for a seed phrase.</p></details>
+    </section>
+
+    <section id="risks">
+      <h2>Risks and disclaimers</h2>
+      <p>Nothing here or in any MEKANEKO product is financial, investment, legal or tax advice. Meme coins are highly speculative and can lose all their value. AI answers can be wrong or out of date. Audited contracts can still contain bugs. MEKANEKO depends on Robinhood Chain, RPC and data providers, DEXs and its AI provider. Anyone can launch a coin on Nekopult; a fair start does not make a coin good. Rules differ by country, and access may be restricted in some. The roadmap and tokenomics describe intentions, not commitments.</p>
+    </section>
+
+    <section id="links">
+      <h2>Official links</h2>
+      <p>Only trust addresses listed here, and check that the contract address is the same in every official place.</p>
+      <div class="md-table"><table><tbody class="dcLinks"></tbody></table></div>
+      <p class="dc-small">See also the <a href="privacypolicy/" data-lang-link="/privacypolicy/">Privacy Policy</a> and the <a href="contact/" data-lang-link="/contact/">contact page</a>.</p>
+    </section>
+  </main>
+</div>
+
+<div class="dc" data-doc-lang="ja" lang="ja" hidden>
+  <aside class="dc-toc" aria-label="目次">
+    <p class="dc-toc-h">目次</p>
+    <nav>
+      <a href="#j-abstract">概要</a><a href="#j-problem">課題と解決策</a><a href="#j-agents">15体のエージェント</a><a href="#j-access">エージェントの利用</a>
+      <a href="#j-nekopult">Nekopult</a><a href="#j-world">MEKANEKO WORLD</a><a href="#j-tokenomics">$MEKANEKO</a><a href="#j-roadmap">ロードマップ</a>
+      <a href="#j-security">セキュリティ</a><a href="#j-faq">よくある質問</a><a href="#j-risks">リスク</a><a href="#j-links">公式リンク</a>
+    </nav>
+  </aside>
+
+  <main class="dc-main">
+    <header class="dc-top">
+      <p class="dc-eyebrow">MEKANEKO DOCS · ホワイトペーパー · ドラフト v0.2 · 2026年11月20日</p>
+      <h1 class="display">WHITEPAPER</h1>
+      <p class="dc-lede">オンチェーンのすべてを、ひとつの場所で。ローンチや購入の前にリサーチを行う15体のAIエージェントと、Robinhood Chain 上の公平なミームコイン・ローンチパッド「Nekopult」。</p>
+      <p class="dc-note">作業中のドラフトです。トークノミクスと手数料は、Nekopult のコントラクトと監査が完了するまで提案段階です。ローンチ日はここでは発表しません。</p>
+    </header>
+
+    <section id="j-abstract">
+      <h2>概要</h2>
+      <p>MEKANEKO は、すべてのローンチの裏に専門のAIエージェントチームを用意します。エージェントはリアルタイムの市場データとオンチェーンデータを読み、リスクをわかりやすい言葉で説明し、ローンチ計画を下書きします。そして Nekopult は、すべてのコインを同じ公開ボンディングカーブからスタートさせます。トランザクションに署名するのは常にユーザー自身のウォレットで、MEKANEKO が鍵を預かることはありません。</p>
+      <p>物語はこうです。むかしむかし、猫は干支のレースに間に合いませんでした。だから猫は、新しい干支をつくりました。東京のサイボーグ猫・メカくんが、ひとつずつ役目を持つ15体の動物エージェントを率いています。ブラウザで遊べる3D体験「MEKANEKO WORLD」がブランドと物語を伝え、コミュニティは Discord にあります。</p>
+    </section>
+
+    <section id="j-problem">
+      <h2>課題と解決策</h2>
+      <p>ミームコインは数秒でローンチできますが、よい判断には今も何時間ものリサーチが必要で、多くの人はそれを省いてしまいます。MEKANEKO は、そのリサーチをローンチの場に持ち込みます。</p>
+      <div class="md-table"><table>
+        <thead><tr><th>課題</th><th>よくあること</th><th>MEKANEKO がすること</th></tr></thead>
+        <tbody>
+          <tr><td>見切り発車のローンチ</td><td>そのナラティブに勢いがあるかわからないまま、名前と画像だけで公開される</td><td>NEZU と KONKON がトレンドを調べ、ローンチ前に打ち出し方を計画する</td></tr>
+          <tr><td>確認されないコントラクト</td><td>トークンに何ができるかを読まずに、ティッカーだけを信じて買ってしまう</td><td>SHURU がチェーン上の情報を読み、リスクをわかりやすく指摘する</td></tr>
+          <tr><td>不公平なスタート</td><td>プレセールや非公開の割り当てで、一部の人だけが先に入る</td><td>すべてのコインが同じ公開カーブから始まり、プレセールはない</td></tr>
+          <tr><td>ウォレットの流出</td><td>ボットや「サポート」を名乗る人が、接続やシードフレーズの共有を求めてくる</td><td>エージェントは準備だけを行い、署名はユーザー自身が行う</td></tr>
+          <tr><td>情報が多すぎる</td><td>毎日何千もの新しいトークンが生まれ、追いきれない</td><td>KOKEKO が市場を要約し、フォロー中の動きを知らせる</td></tr>
+        </tbody>
+      </table></div>
+      <p>ここから三つのルールが生まれます。<strong>まずリサーチ、公平なローンチ、鍵は自分で持つ。</strong></p>
+    </section>
+
+    <section id="j-agents">
+      <h2>15体のエージェント</h2>
+      <p>エージェントはそれぞれ専用のツールと指示を持っています。普段の言葉で質問すると、RYUJIN が適切なエージェントに振り分け、ひとつの答えで足りないときはエージェント同士が協力します。リアルタイムのデータをもとに答え、確認できなかったことは正直に伝えます。</p>
+      <div class="md-table"><table>
+        <thead><tr><th>エージェント</th><th>役目</th><th>使えるツール</th></tr></thead>
+        <tbody>
+          <tr><td><b>RYUJIN</b>・龍</td><td>エージェント司令官：質問を振り分け、答えをまとめる</td><td>他のエージェント、市場トレンド、Nekopult のトークン、ウェブ</td></tr>
+          <tr><td><b>NEZU</b>・鼠</td><td>トレンドスカウト：流行る前のナラティブを見つける</td><td>市場トレンド、新しいプール、トークン検索、ウェブ</td></tr>
+          <tr><td><b>KONKON</b>・狐</td><td>戦略：ローンチの打ち出し方とタイミング</td><td>市場トレンド、トークンデータ、ウェブ</td></tr>
+          <tr><td><b>SHURU</b>・蛇</td><td>セキュリティ監査：トークンのリスクをわかりやすく</td><td>オンチェーンのトークン情報、市場データ、ウェブ</td></tr>
+          <tr><td><b>KOKEKO</b>・鶏</td><td>ニュースとアラート：何が動いたか、その理由</td><td>ウェブ、ウォッチリスト、トークンデータ</td></tr>
+          <tr><td><b>NISHIKI</b>・鯉</td><td>ローンチガイド：Nekopult でのローンチを下書き</td><td>ローンチ下書き、Nekopult のトークン、トークン検索、ウェブ</td></tr>
+          <tr><td><b>TORAMARU</b>・虎</td><td>トレード実行：あなたが署名する取引を準備</td><td>トークンデータ、ウォレット残高、取引の準備</td></tr>
+          <tr><td><b>KAERU</b>・蛙</td><td>トレジャリー：残高、資金の持ち、保有状況</td><td>ウォレット残高、トークンデータ、ウォッチリスト</td></tr>
+          <tr><td><b>PYON</b>・兎</td><td>高速オートメーション：リストと条件を見張る</td><td>ウォッチリスト、トークンデータ、チェーンの状態</td></tr>
+          <tr><td><b>GYUDON</b>・牛</td><td>インフラ：チェーンの状態、コントラクトの読み取り</td><td>チェーンの状態、オンチェーンのトークン情報</td></tr>
+          <tr><td><b>HAYATE</b>・馬</td><td>クロスチェーン：Robinhood Chain への資金移動</td><td>ウェブ、チェーンの状態、ウォレット残高</td></tr>
+          <tr><td><b>UKKI</b>・猿</td><td>コーディング：スクリプトと計算</td><td>コード実行</td></tr>
+          <tr><td><b>CHOTOTSU</b>・猪</td><td>グロースとマーケティング：ローンチのキャンペーン</td><td>ウェブ、トークンデータ、Nekopult のトークン</td></tr>
+          <tr><td><b>MEEMEE</b>・羊</td><td>コミュニティとミーム：名前、物語、ミームのアイデア</td><td>ウェブ、Nekopult のトークン</td></tr>
+          <tr><td><b>HACHI</b>・犬</td><td>ユーザーサポート：MEKANEKO の使い方</td><td>ウェブ、チェーンの状態、Nekopult のトークン</td></tr>
+        </tbody>
+      </table></div>
+      <p>データソース：Robinhood Chain RPC（チェーンID 4663）、GeckoTerminal、DexScreener、ウェブ検索、コード実行環境。エージェントが鍵を持つこと、シードフレーズを尋ねること、トランザクションを送信することはありません。エージェントは Anthropic の Claude モデルで動き、APIキーはサーバー側だけで管理しています。</p>
+    </section>
+
+    <section id="j-access">
+      <h2>エージェントの利用</h2>
+      <p>エージェントは二つの場所で働いていて、それぞれ入り口が違います。</p>
+      <div class="md-table"><table>
+        <thead><tr><th>場所</th><th>対象</th><th>できること</th></tr></thead>
+        <tbody>
+          <tr><td>Discord サーバー</td><td>すべてのメンバー（無料）</td><td>すでに6体が活動中です：レベルと報酬（PYON）、FAQ と歓迎（HACHI）、アドレスのチェックと詐欺の監視（SHURU）、ニュースと X の投稿（KOKEKO）、おみくじとミームコンテスト（MEEMEE）、エージェント一覧（RYUJIN）。<code>/ask</code> で何でも質問できます：1日5回まで無料（レベル10からは10回）。</td></tr>
+          <tr><td>ウェブのエージェントコンソール</td><td>すべての人（無料）</td><td>15体すべてのエージェントと、そのすべてのツール。訪問者ごとに1日5回まで無料です。ローンチ後は 100 $MEKANEKO 以上を保有するウォレットに追加の質問枠があります：ウォレットでメッセージに署名すると（資金は動きません）、コンソールが Robinhood Chain 上の $MEKANEKO 残高を確認します。</td></tr>
+        </tbody>
+      </table></div>
+      <p><a href="agents/" data-lang-link="/agents/">エージェントコンソールを見る</a> · <a href="https://discord.gg/42sGtf5Xx2" target="_blank" rel="noopener">Discord に参加する</a></p>
+    </section>
+
+    <section id="j-nekopult">
+      <h2>Nekopult ローンチパッド</h2>
+      <p>Robinhood Chain（チェーンID 4663、ガスは ETH）上のミームコイン・ローンチパッドです。すべてのコインは同じ方法で、公開ボンディングカーブからスタートします。コントラクトはまだ構築前で、以下はその設計方針です。それまでのあいだ、ページにはデモ用のコインが表示されます。<a href="nekopult/" data-lang-link="/nekopult/">Nekopult を開く</a>。</p>
+      <ol class="dc-steps">
+        <li><b>準備。</b>NEZU にナラティブを、SHURU にリスクを、NISHIKI にローンチの下書きを頼みます。</li>
+        <li><b>ローンチ。</b>トランザクションに一度署名するだけ。コインは固定の供給量でボンディングカーブ上に作成されます。プレセールも非公開の割り当てもありません。</li>
+        <li><b>カーブ上での取引。</b>価格は買われるたびに上がり、売られるたびに下がります。計算式はすべてのコインで同じです。</li>
+        <li><b>卒業。</b>カーブが売り切れると、集まった ETH と残りのトークンが DEX の流動性になり、自由に取引できるようになります。</li>
+      </ol>
+      <div class="md-table"><table>
+        <thead><tr><th>手数料（提案）</th><th>料率</th><th>配分先</th></tr></thead>
+        <tbody>
+          <tr><td>カーブ上の取引</td><td>売買ごとに 1%</td><td>トレジャリー 0.5% · コイン作成者 0.3% · エージェント利用プール 0.2%</td></tr>
+          <tr><td>コインの作成</td><td>ガス代のみ</td><td>ネットワーク</td></tr>
+          <tr><td>卒業</td><td>固定額の ETH（今後決定）</td><td>トレジャリー（流動性の設定費用）</td></tr>
+        </tbody>
+      </table></div>
+      <p>コントラクトはまず Robinhood Chain のテストネット（46630）で動かし、メインネットでのローンチ前に独立した監査の結果を公開します。コントラクトのソースコードは Robinhood Chain のエクスプローラー（Blockscout）で検証し、GitHub でも公開します。誰でも実際に動くコードを読めるようにするためです。</p>
+    </section>
+
+    <section id="j-world">
+      <h2>MEKANEKO WORLD と物語</h2>
+      <p>ダウンロードもウォレットも不要の、ブラウザで遊べる3D体験です。メカくんを起動し、ステッカーを貼り、15体のエージェントが並ぶ美術館を歩き、モニュメントでチャントを聴き、ネオン横丁で踊り、七つのワールドを駆け抜けます。<a href="world/" data-lang-link="/world/">MEKANEKO WORLD で遊ぶ</a>。</p>
+      <p>むかしむかし、十二の動物が干支に入るために競い合い、猫は間に合いませんでした。何百年も後の東京で、メカくんというサイボーグ猫は、席を求めるのではなく新しい干支をつくることにしました。それぞれひとつの役目を持つ15体の動物エージェントが、オンチェーンでローンチするすべての人のために働いています。</p>
+    </section>
+
+    <section id="j-tokenomics">
+      <h2>$MEKANEKO</h2>
+      <p>ティッカーは <b>$MEKANEKO</b> です。Robinhood Chain のボンディングカーブ型ローンチパッド <b>Pons</b> で、完全なフェアローンチとしてローンチします。Pons は固定供給量 <b>1,000,000,000</b> のすべてを直接カーブに発行します。プレセールもチーム配分もなく、ローンチ後の追加発行、凍結、ブラックリストもありません。全員が同じ公開カーブで購入します。カーブが埋まると、$MEKANEKO は Uniswap v4 のプールへ卒業し、その流動性は Pons によって永久にロックされます。MEKANEKO 自身のローンチパッド Nekopult は、監査の後に開始します。ここに書かれた内容は、弁護士の確認を経るまで確定ではありません。</p>
+      <div class="md-table"><table>
+        <thead><tr><th>供給量 1,000,000,000 の配分</th><th>Pons での $MEKANEKO</th></tr></thead>
+        <tbody>
+          <tr><td>Pons のボンディングカーブで販売</td><td>約 71%（5/7）</td></tr>
+          <tr><td>卒業時の Uniswap v4 プール（流動性は永久ロック）</td><td>約 20%</td></tr>
+          <tr><td>Pons のロッカーで永久保管</td><td>約 8%</td></tr>
+          <tr><td>チーム、トレジャリー、プレセール、プライベートセール</td><td>0%</td></tr>
+        </tbody>
+      </table></div>
+      <p>配分は Pons v2 の固定ルールで、Pons と Bitquery が公開しているものです。チームが購入する場合も、ほかの人と同じくカーブで、ローンチ前に検証ページで公開するウォレットから購入します。</p>
+      <p><b>100 $MEKANEKO</b> 以上を保有すると、ウェブのエージェントへの1日の質問枠が増え、次に何をつくるかを決めるオフチェーン投票にも参加できます。$MEKANEKO は利益、収益、所有権を約束するものではありません。</p>
+    </section>
+
+    <section id="j-roadmap">
+      <h2>ロードマップ</h2>
+      <p>ロードマップは MEKANEKO WORLD の10の章、BOOT から LOGO までに沿って進みます。MEKANEKO はいまシーズン0にいます。ローンチでシーズン1が始まり、シーズン2も同時に始まるかもしれません。シーズン3から9はこの先の計画です。それぞれチームが発表した時点で始まり、内容は変わることがあります。日付はお約束しません。</p>
+      <ol class="dc-road">
+        <li class="done"><span>完成済み</span><p>MEKANEKO WORLD とフィルム · リアルタイムデータで動くエージェントコンソール · Nekopult の画面（デモデータ） · Robinhood Chain への接続とウォレット接続</p></li>
+        <li class="now"><span>S0 · BOOT（現在）</span><p>15体すべてのエージェントがウェブと Discord で稼働中（1日の無料質問つき） · Discord コミュニティと Telegram チャンネル · 公式 X アカウント · GitHub の公開リポジトリ · ステータスと検証のページ · アプリへのより速い入り口 · 利用規約と法的レビュー</p></li>
+        <li><span>S1 · VOLT（ローンチ）</span><p>Robinhood Chain の Pons で $MEKANEKO をフェアローンチ。コントラクトアドレスはウェブ、X、Discord、Telegram に同時に表示されます · 資金を動かせない署名によるウォレットログイン · 100 $MEKANEKO 以上のホルダーはエージェントへの質問枠が増加 · SHURU のコントラクトチェックと KOKEKO のアラートチャンネル</p></li>
+        <li><span>S2 · MUSEUM（ローンチと同時、またはその直後）</span><p>すべてのエージェントがフルツールと自分の話し方で稼働 · The Record：各エージェントの判断を記録する公開の成績表 · MEKANEKO WORLD のミュージアムのプレートにリアルタイムの数字</p></li>
+        <li class="gate"><span>ゲート · Nekopult の監査レポート公開</span></li>
+        <li><span>S3 · MONUMENT（計画）</span><p>Nekopult v1 稼働：1回のトランザクションでコインをローンチ · 取引手数料は自動で集計され、クリエイターはクリエイターデスクから受け取り · すべてのコインに「Born on Nekopult」バッジと SHURU の安全スタンプ · X と Telegram からローンチ</p></li>
+        <li><span>S4 · NEON（計画）</span><p>TORAMARU の取引をあなた自身のウォレットで署名 · 定期購入、指値、利確注文 · 支出上限つきのエージェントウォレット（任意） · PYON のオートパイロットとホルダー向けのウォレット保護アラート</p></li>
+        <li><span>S5 · POSTER（計画）</span><p>Neko Quest Board：いいねではなく、実際の作品（アート、動画、翻訳、バグ報告）に報酬 · CHOTOTSU と MEEMEE のコンテンツエンジン · Market Omikuji をあらゆる場所に、Sticker Passport · MEKANEKO WORLD の中にリアルタイムのローンチ掲示板</p></li>
+        <li><span>S6 · BREAKOUT（計画）</span><p>ほかのエージェントのための MEKANEKO：MCP サーバー、CLI、REST API · ほかのアプリやエージェント向けの従量課金の SHURU チェック · 15体のエージェントのオンチェーン ID と評判 · 1日の枠を超えて使える Neko Credits</p></li>
+        <li><span>S7 · STYLE RUN（計画）</span><p>The Great Zodiac Race：3D ワールドにランキングが出る週替わりのペーパートレードリーグ · 購入前にエージェントが議論する Zodiac Council · エージェントの音声と、毎週の Meka-kun まとめ動画</p></li>
+        <li><span>S8 · SHATTER（計画）</span><p>HAYATE が Base、Arbitrum、Solana をまたいでブリッジと取引 · 任意：トークン化株式のデスクとチャットからの無期限先物（実資金でのテスト後のみ）</p></li>
+        <li><span>S9 · LOGO（計画）</span><p>すべての入出金をオンチェーンで公開するトレジャリー · 次に何をつくるかのホルダー投票 · Telegram Mini App、ブラウザ拡張機能、モバイルアプリ、そして起動ターミナルの MEKANEKO OS</p></li>
+      </ol>
+    </section>
+
+    <section id="j-security">
+      <h2>セキュリティとノンカストディアルの原則</h2>
+      <ul>
+        <li><b>鍵もシードフレーズも不要。</b>エージェントは署名できません。MEKANEKO がシードフレーズや秘密鍵を求めることはなく、サポートも決して求めません。</li>
+        <li><b>署名によるサインイン。</b>ウォレットでのサインインはメッセージへの署名で行います。所有の証明になるだけで、資金は動きません。</li>
+        <li><b>準備はしても、実行はしない。</b>取引やローンチはエージェントが準備し、署名する前にウォレットが内容を正確に表示します。</li>
+        <li><b>秘密情報はサーバー側に。</b>AIとデータプロバイダーのキーはサーバーにのみ保管します。</li>
+        <li><b>監査済み・検証済みのコントラクト。</b>まずテストネット、メインネット前に独立した監査を公開、ソースはエクスプローラーで検証、メインネットでバグバウンティ。</li>
+        <li><b>正直なAI。</b>エージェントは情報源を示し、確認できなかったことを伝えます。回答は情報であり、助言ではありません。</li>
+      </ul>
+    </section>
+
+    <section id="j-faq">
+      <h2>よくある質問</h2>
+      <details><summary>エージェントは本物ですか？</summary><p>はい。Anthropic の Claude モデルで動き、Robinhood Chain、GeckoTerminal、DexScreener、ウェブのリアルタイムデータを使い、どのツールを使ったかも表示します。そのうち6体はすでに Discord で活動しています。</p></details>
+      <details><summary>エージェントが代わりに取引してくれますか？</summary><p>いいえ。取引やローンチの準備はできますが、署名できるのはあなた自身のウォレットだけです。</p></details>
+      <details><summary>ウォレットは必要ですか？</summary><p>不要です。エージェントは Discord でもウェブでも、1日の上限つきで無料で使えます。ローンチ後は 100 $MEKANEKO 以上を保有するウォレットの質問枠が増えます。</p></details>
+      <details><summary>なぜ Robinhood Chain なのですか？</summary><p>ガスが ETH で、速く安く、ミームとトレードの盛り上がりが育っているチェーンだからです。Nekopult とエージェントはまずこのチェーン向けにつくられています。</p></details>
+      <details><summary>Nekopult のローンチはなぜ公平なのですか？</summary><p>すべてのコインが同じ公開ボンディングカーブから始まり、プレセールも非公開の割り当てもないからです。</p></details>
+      <details><summary>$MEKANEKO は投資ですか？</summary><p>いいえ。エージェントの利用とコミュニティ投票のためのミーム兼ユーティリティトークンで、利益の約束はありません。価格がゼロになる可能性もあります。</p></details>
+      <details><summary>コントラクトアドレスはどれですか？</summary><p>Discord の #official-links にあるものと、mekaneko.com とこのダッシュボードの COPY CA ボタンに表示されるものだけです（X アカウントの開設後は、固定ポストにも掲載します）。すべてが一致しない場合は購入しないでください。</p></details>
+      <details><summary>チームから DM が来ることはありますか？</summary><p>ありません。私たちから先に DM を送ること、DM でプレセールを行うこと、シードフレーズを尋ねることは決してありません。</p></details>
+    </section>
+
+    <section id="j-risks">
+      <h2>リスクと免責事項</h2>
+      <p>このドキュメントおよび MEKANEKO のいかなるプロダクトも、金融、投資、法律、税務の助言ではありません。ミームコインは非常に投機的で、価値をすべて失う可能性があります。AIの回答は誤っていたり、古かったりすることがあります。監査済みのコントラクトにもバグが残る可能性があります。MEKANEKO は Robinhood Chain、RPC とデータプロバイダー、DEX、AIプロバイダーに依存しています。Nekopult では誰でもコインをローンチでき、公平なスタートがそのコインの良さを保証するわけではありません。規制は国によって異なり、一部の地域では利用が制限される場合があります。ロードマップとトークノミクスは意図を示すもので、確約ではありません。</p>
+    </section>
+
+    <section id="j-links">
+      <h2>公式リンク</h2>
+      <p>ここに掲載されたアドレスだけを信頼し、コントラクトアドレスがすべての公式の場所で一致しているか確認してください。</p>
+      <div class="md-table"><table><tbody class="dcLinks"></tbody></table></div>
+      <p class="dc-small"><a href="privacypolicy/" data-lang-link="/privacypolicy/">プライバシーポリシー</a>と<a href="contact/" data-lang-link="/contact/">お問い合わせページ</a>もご覧ください。</p>
+    </section>
+  </main>
+</div>
+<script src="/app/common.js"></script>
+<script>
+  (async () => {
+    // keep only the version for this page's language (ids stay unique), then the shared bits
+    document.querySelectorAll('[data-doc-lang]').forEach((d) => { if (d.dataset.docLang === MK.lang) d.hidden = false; else d.remove(); });
+    MK.header('/docs/');
+    const L = (p) => `/${MK.lang}${p}`;
+    document.querySelectorAll('[data-lang-link]').forEach((a) => { a.href = L(a.dataset.langLink); });
+    let c = {}; try { c = await MK.getJSON('/mekaneko/config.json'); } catch {}
+    const row = (k, v, href) => `<tr><td>${k}</td><td>${href ? `<a href="${MK.esc(href)}" target="_blank" rel="noopener">${MK.esc(v)}</a>` : `<span class="dc-muted">${MK.esc(v)}</span>`}</td></tr>`;
+    const soon = MK.t('Coming soon', '近日公開'), discord = c.discordUrl || 'https://discord.gg/42sGtf5Xx2';
+    document.querySelectorAll('.dcLinks').forEach((tb) => { tb.innerHTML = [
+      row('MEKANEKO WORLD', c.worldUrl || soon, c.worldUrl),
+      row(MK.t('Dashboard', 'ダッシュボード'), location.origin, location.origin),
+      row('Discord', discord, discord),
+      row('Telegram', c.telegramUrl || soon, c.telegramUrl),
+      row('X', c.xUrl || soon, c.xUrl),
+      row('GitHub', c.githubUrl || soon, c.githubUrl),
+      row(MK.t('Status', 'ステータス'), location.origin + `/${MK.lang}/status/`, `/${MK.lang}/status/`),
+      row(MK.t('Verify', '検証'), location.origin + `/${MK.lang}/verify/`, `/${MK.lang}/verify/`),
+      row(`${MK.t('Contract', 'コントラクト')} · $MEKANEKO${c.chain ? ' · ' + c.chain : ''}`, c.ca || soon, c.ca ? `https://robinhoodchain.blockscout.com/token/${c.ca}` : ''),
+    ].join(''); });
+    // highlight the section in view in the contents list
+    const links = [...document.querySelectorAll('.dc-toc a')];
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) links.forEach((a) => a.toggleAttribute('aria-current', a.getAttribute('href') === '#' + e.target.id)); }), { rootMargin: '-30% 0px -60% 0px' });
+    document.querySelectorAll('.dc-main section[id]').forEach((s) => io.observe(s));
+  })();
+</script>
+</body>
+</html>

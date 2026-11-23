@@ -1,0 +1,8 @@
+{
+  "name": "mekaneko-telegram",
+  "private": true,
+  "type": "module",
+  "description": "MEKANEKO's Telegram agents: SHURU, HACHI, PYON, KOKEKO, MEEMEE, RYUJIN.",
+  "scripts": { "start": "node index.mjs", "test": "node test_rules.mjs && node test_bots.mjs" },
+  "dependencies": { "grammy": "1.46.0" }
+}

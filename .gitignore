@@ -1,0 +1,7 @@
+node_modules/
+data/
+vendor/
+secrets.env
+*.env
+chat.json
+.DS_Store

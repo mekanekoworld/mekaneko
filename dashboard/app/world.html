@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MEKANEKO WORLD</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/app/fonts.css">
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0b0b0b; color: #d0d0d0; font: 500 16px/1.6 "Inter Tight", "Noto Sans JP", system-ui, sans-serif; }
+  main { min-height: 100%; display: grid; place-items: center; padding: 24px; box-sizing: border-box; text-align: center; }
+  .wrap { max-width: 520px; display: grid; gap: 16px; justify-items: center; }
+  img { width: 120px; height: auto; }
+  h1 { margin: 0; font: 400 28px/1.2 Audiowide, "Inter Tight", sans-serif; letter-spacing: .04em; color: #fff; }
+  p { margin: 0; color: #a8a8a8; }
+  .bar { width: 160px; height: 2px; background: rgba(208, 208, 208, .15); overflow: hidden; border-radius: 2px; }
+  .bar i { display: block; height: 100%; width: 100%; background: #cb5a0c; transform-origin: left; animation: go 1.2s ease-in-out infinite; }
+  @keyframes go { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  a { color: #fff; font-weight: 700; text-decoration: none; border: 1px solid rgba(208, 208, 208, .45); border-radius: 999px; padding: 10px 22px; }
+  a:hover { background: #d0d0d0; color: #111; }
+  a:focus-visible { outline: 2px solid #cb5a0c; outline-offset: 3px; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { .bar i { animation: none; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="wrap">
+    <img src="/elements/logo.png" alt="MEKANEKO">
+    <h1>MEKANEKO WORLD</h1>
+    <div id="going"><p id="msg-go"></p><div class="bar" aria-hidden="true"><i></i></div></div>
+    <div id="soon" hidden><p id="msg-soon"></p></div>
+    <a id="back" href="/"></a>
+  </div>
+</main>
+<script>
+  // Nav "MEKANEKO WORLD": opens the 3D site. Its address is "worldUrl" in /mekaneko/config.json; while it is empty, a
+  // visit on this Mac goes to the local copy (http://localhost:8766), anywhere else it says the world opens soon.
+  (async () => {
+    const ja = document.documentElement.lang === 'ja';
+    document.getElementById('msg-go').textContent = ja ? '3D の世界へ移動しています…' : 'Taking you to the 3D world…';
+    document.getElementById('msg-soon').textContent = ja ? 'MEKANEKO WORLD はまもなく公開します。' : 'MEKANEKO WORLD opens soon.';
+    const back = document.getElementById('back');
+    back.textContent = ja ? 'ダッシュボードに戻る' : 'Back to the dashboard'; back.href = ja ? '/ja/' : '/en/';
+    let url = '';
+    try { url = ((await (await fetch('/mekaneko/config.json', { cache: 'no-cache' })).json()).worldUrl || '').trim(); } catch (e) {}
+    if (!url && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) url = `http://${location.hostname}:8766/`;
+    if (!url) { document.getElementById('going').hidden = true; document.getElementById('soon').hidden = false; return; }
+    const u = new URL(url, location.href); u.searchParams.set('lang', ja ? 'ja' : 'en');
+    location.replace(u.toString());
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nekopult</title>
+<meta name="description" content="Nekopult: launch meme coins on Robinhood Chain in one transaction. Trade on the bonding curve, graduate to Uniswap. Research first with the MEKANEKO agents.">
+<meta property="og:title" content="Nekopult by MEKANEKO">
+<meta property="og:image" content="/mekaneko/ogp.jpg">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/app/app.css">
+<link rel="stylesheet" href="/app/nekopult.css">
+</head>
+<body>
+<header id="mk-head"></header>
+<main class="np">
+  <section class="np-top">
+    <div>
+      <h1 class="display np-title">NEKOPULT</h1>
+      <p class="np-lede muted" id="npLede"></p>
+    </div>
+    <div class="np-top-actions">
+      <a class="btn" id="npAsk"></a>
+      <button class="btn btn--key" id="npCreateTop" type="button"></button>
+      <button class="btn" id="npWallet" type="button"></button>
+    </div>
+  </section>
+
+  <section class="np-token panel" id="npToken" aria-label="MEKANEKO token"></section>
+  <section class="np-steps panel" id="npSteps" aria-label="How Nekopult works"></section>
+
+  <div class="np-grid">
+    <div class="np-main">
+      <div class="np-toolbar">
+        <div class="np-tabs" role="tablist" id="npTabs"></div>
+        <label class="np-search"><span class="sr">Search</span><input id="npSearch" type="search" autocomplete="off"></label>
+        <span class="badge badge--demo" id="npDemo">DEMO</span>
+      </div>
+      <p class="np-sample" id="npSample" role="note"></p>
+      <div class="np-cards" id="npCards"></div>
+
+      <section class="np-live" aria-label="Live on Robinhood Chain">
+        <div class="np-live-head">
+          <h2 class="display" id="npLiveTitle"></h2>
+          <div class="np-tabs" id="npLiveTabs"></div>
+          <span class="badge badge--live" id="npLiveBadge">LIVE</span>
+        </div>
+        <div class="np-table-wrap"><table class="np-table" id="npLive"></table></div>
+        <p class="dim np-source" id="npSource"></p>
+      </section>
+    </div>
+
+    <aside class="np-rail">
+      <section class="panel np-box" id="npChain"></section>
+      <section class="panel np-box" id="npStats"></section>
+      <section class="panel np-box" id="npFeed"></section>
+      <section class="panel np-box" id="npAgents"></section>
+    </aside>
+  </div>
+</main>
+
+<dialog class="np-dialog" id="npCreate" aria-labelledby="npCreateTitle"></dialog>
+<dialog class="np-dialog np-drawer" id="npDetail"></dialog>
+
+<script src="/app/common.js"></script>
+<script src="/app/nekopult.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MEKANEKO Agents</title>
+<meta name="description" content="Talk to the fifteen MEKANEKO AI agents: trend research, launch strategy, security checks, launch drafts and trades on Robinhood Chain.">
+<meta property="og:title" content="MEKANEKO Agents">
+<meta property="og:image" content="/mekaneko/ogp.jpg">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/app/app.css">
+<link rel="stylesheet" href="/app/agents.css">
+</head>
+<body>
+<header id="mk-head"></header>
+<main class="ag">
+  <aside class="ag-list" aria-label="Agents">
+    <h1 class="ag-title display">AGENTS</h1>
+    <p class="ag-sub muted" id="agSub"></p>
+    <ul id="agList" role="list"></ul>
+  </aside>
+  <section class="ag-chat" aria-label="Chat">
+    <div class="ag-bar" id="agBar"></div>
+    <div class="ag-offline" id="agOffline" hidden></div>
+    <div class="ag-log" id="agLog"></div>
+    <form class="ag-form" id="agForm">
+      <label class="sr" for="agInput">Message</label>
+      <textarea id="agInput" rows="1" autocomplete="off"></textarea>
+      <button class="btn btn--key ag-send" id="agSend" type="submit"></button>
+    </form>
+    <p class="ag-note dim" id="agNote"></p>
+  </section>
+  <aside class="ag-profile" id="agProfile" aria-label="Agent profile"></aside>
+</main>
+<script src="/app/common.js"></script>
+<script src="/app/agents.js"></script>
+</body>
+</html>

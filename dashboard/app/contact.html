@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · MEKANEKO</title>
+<meta name="description" content="Contact MEKANEKO through the official channels only: X, Discord, Telegram and GitHub.">
+<meta property="og:title" content="Contact MEKANEKO">
+<meta property="og:image" content="/mekaneko/ogp.jpg">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/app/app.css">
+<link rel="stylesheet" href="/app/docs.css">
+<style>
+  .ct { max-width: 96rem; margin: 0 auto; padding: 5rem clamp(1.6rem, 3vw, 4rem) 10rem; }
+  .ct h1 { margin: .6rem 0 0; font-size: clamp(4.4rem, 7vw, 8rem); color: #fff; line-height: 1; }
+  .ct-grid { margin-top: 3.2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr)); gap: 1.4rem; }
+  .ct-card { display: grid; gap: .8rem; align-content: start; padding: 2.2rem; border: 1px solid var(--line); border-radius: 1.4rem; background: var(--panel); text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
+  a.ct-card:hover { border-color: var(--line-2); transform: translateY(-2px); }
+  .ct-card b { font-family: var(--display); font-weight: 400; font-size: 2.2rem; color: #fff; }
+  .ct-card span { color: var(--ink-2); font-size: 1.45rem; }
+  .ct-card em { font-style: normal; color: var(--key-2); font-weight: 700; font-size: 1.35rem; word-break: break-all; }
+  .ct-card.is-soon em { color: var(--ink-3); }
+  .ct-warn { margin-top: 3.2rem; padding: 2rem 2.2rem; border: 1px solid rgba(203, 90, 12, .5); border-radius: 1.4rem; background: rgba(203, 90, 12, .07); }
+  .ct-warn h2 { margin: 0 0 1rem; font-family: var(--display); font-weight: 400; font-size: 2rem; color: #fff; }
+  .ct-warn ul { margin: 0; padding-left: 2rem; display: grid; gap: .6rem; font-size: 1.5rem; }
+</style>
+</head>
+<body>
+<header id="mk-head"></header>
+<main class="ct">
+  <p class="dc-eyebrow">MEKANEKO</p>
+  <h1 class="display">CONTACT</h1>
+  <p class="dc-lede" id="ctLede"></p>
+  <div class="ct-grid" id="ctGrid"></div>
+  <section class="ct-warn" aria-labelledby="ctWarnH">
+    <h2 id="ctWarnH"></h2>
+    <ul id="ctWarn"></ul>
+  </section>
+  <p class="dc-small" style="margin-top:2.4rem" id="ctMore"></p>
+</main>
+<script src="/app/common.js"></script>
+<script>
+  (async () => {
+    const { t, esc, lang } = MK; MK.header('/contact/');
+    document.getElementById('ctLede').textContent = t('Talk to us through the official channels below. For questions about using MEKANEKO, HACHI in the agent console answers any time.',
+      '以下の公式チャンネルからご連絡ください。MEKANEKO の使い方については、エージェントコンソールの HACHI がいつでも答えます。');
+    let c = {}; try { c = await MK.getJSON('/mekaneko/config.json'); } catch {}
+    const card = (title, desc, url, label) => url
+      ? `<a class="ct-card" href="${esc(url)}" target="_blank" rel="noopener"><b>${title}</b><span>${desc}</span><em>${esc(label || url.replace(/^https?:\/\//, '').replace(/^mailto:/, ''))}</em></a>`
+      : `<div class="ct-card is-soon"><b>${title}</b><span>${desc}</span><em>${t('Coming soon', '近日公開')}</em></div>`;
+    document.getElementById('ctGrid').innerHTML = [
+      card('X', t('News, launches and the weekly agent brief.', 'ニュース、ローンチ情報、毎週のエージェント・ブリーフ。'), c.xUrl),
+      card('DISCORD', t('Community, support and partnership requests.', 'コミュニティ、サポート、提携のご相談。'), c.discordUrl || 'https://discord.gg/42sGtf5Xx2', 'discord.gg/42sGtf5Xx2'),
+      card('TELEGRAM', t('Announcements and community chat.', 'お知らせとコミュニティチャット。'), c.telegramUrl),
+      card('GITHUB', t('Source code, published for anyone to review.', 'ソースコード。だれでも確認できるように公開します。'), c.githubUrl),
+      `<a class="ct-card" href="/${lang}/agents/?agent=hachi"><b>HACHI</b><span>${t('Our support agent, in the agent console.', 'エージェントコンソールのサポート担当。')}</span><em>${t('Ask HACHI', 'HACHI に聞く')}</em></a>`,
+    ].join('');
+    document.getElementById('ctWarnH').textContent = t('Stay safe', '安全のために');
+    document.getElementById('ctWarn').innerHTML = [
+      t('We never DM first, and we never run presales in DMs.', '私たちから DM を送ることはなく、DM でのプレセールも行いません。'),
+      t('No one from MEKANEKO will ever ask for your seed phrase or private key.', 'MEKANEKO がシードフレーズや秘密鍵を尋ねることは決してありません。'),
+      t('The contract address is only valid if it matches in #official-links on our Discord and on the COPY CA button of our websites.', 'コントラクトアドレスは、Discord の #official-links と公式サイトの COPY CA ボタンで一致する場合のみ有効です。'),
+    ].map((x) => `<li>${esc(x)}</li>`).join('');
+    document.getElementById('ctMore').innerHTML = `${t('Read the', '詳しくは')} <a href="/${lang}/docs/">${t('Docs', 'ドキュメント')}</a> · <a href="/${lang}/privacypolicy/">${t('Privacy Policy', 'プライバシーポリシー')}</a>`;
+  })();
+</script>
+</body>
+</html>
