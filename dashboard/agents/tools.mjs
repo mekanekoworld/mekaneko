@@ -100,6 +100,22 @@ export const TOOLS = {
       return { chain_id: Number(id), latest_block: Number(bn), block_age_s: Math.max(0, Math.round(Date.now() / 1000 - Number(blk.timestamp))),
         gas_price_gwei: Number(BigInt(gp)) / 1e9, explorer: CHAIN.explorer, source: 'Robinhood Chain RPC' };
     } },
+  gate_check: {                                                           // SHURU: the Gate, ported from Troya Agent (MIT), see gate/robinhood.mjs
+    def: { name: 'gate_check', description: 'The Gate: the full pre-trade check of a Robinhood Chain token, the same one a buy would get. Route (Pons curve or Uniswap), price impact, pool depth, fees and taxes, a simulated buy, a simulated sell back, transfer tax, plus contract red flags (mint, pause, blacklist, fee or limit setters, owner, proxy). Read-only: nothing is signed or sent. Use it before any "is it safe to buy" answer.',
+      input_schema: S({ token: address, amount_eth: { type: 'number', description: 'buy size to test, in ETH (default 0.01, at most 5)' } }, ['token']) },
+    async run({ token, amount_eth = 0.01 }) {
+      const g = await import('./gate/robinhood.mjs');
+      const amt = String(Math.min(5, Math.max(0.0001, Number(amount_eth) || 0.01)));
+      const [gate, health] = await Promise.all([
+        g.gateCheck({ tokenIn: 'ETH', tokenOut: token, amountIn: amt }).catch((e) => ({ error: e.message })),
+        g.tokenHealth(token).catch((e) => ({ error: e.message })),
+      ]);
+      const worst = (gate.checks || []).some((c) => c.status === 'fail') ? 'fail' : (gate.checks || []).some((c) => c.status === 'warn') ? 'warn' : gate.checks ? 'pass' : 'unknown';
+      return { source: 'MEKANEKO Gate on Robinhood Chain RPC (eth_call simulations; ported from Troya Agent, MIT)', tested_buy_eth: Number(amt),
+        gate_passed: gate.pass ?? null, worst_check: worst, route: gate.quote?.route?.label || null, venue: gate.quote?.venue || null,
+        checks: gate.checks || [], gate_error: gate.error || null, health: health.error ? { error: health.error } : { risk: health.risk, flags: health.flags, proxy: health.proxy || null },
+        reading_guide: 'fail = DANGER, warn = CAUTION, all pass = SAFE (for this size, right now). Health flags add context; "skip" means not measurable.' };
+    } },
   service_status: {                                                       // GYUDON: the same checks as the public status page (/status)
     def: { name: 'service_status', description: 'MEKANEKO status right now, the same checks as the public status page: Robinhood Chain RPC health and response time, the market data feed (GeckoTerminal), and the agents. Use it for "is X down?" questions.', input_schema: S({}) },
     async run() {
