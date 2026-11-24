@@ -117,7 +117,7 @@ try {
   });
   await step('filter: official links, our invite and admins are left alone; scam words are removed', async () => {
     const s = since();
-    const ok1 = msg(dave, 'see https://mekaneko.com and t.me/+kzi75X8ljrU3Yjg1', { entities: [{ type: 'url', offset: 4, length: 20 }, { type: 'url', offset: 29, length: 22 }] });
+    const ok1 = msg(dave, 'see https://mekaneko.com and t.me/mekanekoworld', { entities: [{ type: 'url', offset: 4, length: 20 }, { type: 'url', offset: 29, length: 22 }] });
     const ok2 = msg(OWNER, 'partner https://partner.example', { entities: [{ type: 'url', offset: 8, length: 23 }] });
     await none('delete official/admin', (c) => c.method === 'deleteMessage' && [ok1.message_id, ok2.message_id].includes(c.body.message_id), s);
     const bad = msg(dave, 'admin here, send me your seed phrase');
@@ -135,7 +135,7 @@ try {
     assert.ok(menu.body.reply_markup.inline_keyboard.flat().some((b) => b.callback_data === 'faq:token:en'));
     tap(dave, 'faq:token:en', 7777);
     await waitFor('faq answer', (c) => c.bot === 'HACHI' && c.method === 'editMessageText' && /\$MEKANEKO is not live yet/.test(c.body.text) && /\/links/.test(c.body.text), s);
-    msg(dave, '/links'); await waitFor('links', sent('HACHI', /t\.me\/\+kzi75X8ljrU3Yjg1[\s\S]*not live yet/), s);
+    msg(dave, '/links'); await waitFor('links', sent('HACHI', /t\.me\/mekanekoworld[\s\S]*not live yet/), s);
     msg(dave, '/rules'); await waitFor('rules', sent('HACHI', /group rules[\s\S]*グループのルール/), s);
   });
   await step('MEEMEE /omikuji and RYUJIN /agents, /ask', async () => {
@@ -178,7 +178,7 @@ try {
     await waitFor('leave -999', (c) => c.method === 'leaveChat' && c.body.chat_id === -999, s);
     const dm = { id: 100, type: 'private', first_name: 'Alice' };
     queues.HACHI.push({ update_id: ++up, message: { message_id: ++mid, date: 0, chat: dm, from: alice, text: '/start', entities: [{ type: 'bot_command', offset: 0, length: 6 }] } });
-    await waitFor('HACHI intro', sent('HACHI', /I’m HACHI[\s\S]*t\.me\/\+kzi75X8ljrU3Yjg1/, 100), s);
+    await waitFor('HACHI intro', sent('HACHI', /I’m HACHI[\s\S]*t\.me\/mekanekoworld/, 100), s);
     queues.SHURU.push({ update_id: ++up, message: { message_id: ++mid, date: 0, chat: dm, from: alice, text: '/check nope', entities: [{ type: 'bot_command', offset: 0, length: 6 }] } });
     await waitFor('SHURU check usage', sent('SHURU', /Send it like this/, 100), s);
   });

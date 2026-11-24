@@ -1,6 +1,6 @@
 // KOKEKO 🐔 news: /x posts a MEKANEKO post from X into #x-feed and pings @Raid; /announce writes an announcement (with @Announcements)
 // and publishes it to every server that follows #announcements. Team only. No AI (the daily brief comes with the AI).
-// Both also go to the MEKANEKO Telegram channel (pinned for announcements) unless telegram:false; see ../telegram.mjs.
+// Both also go to the MEKANEKO Telegram group (pinned for announcements) unless telegram:false; see ../telegram.mjs.
 import { GatewayIntentBits as I, Events, SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
 import { tgReady, tgPost, toTgHtml, esc as tgEsc } from '../telegram.mjs';
 import { trendCard, omikujiCard } from '../market.mjs';
@@ -124,8 +124,8 @@ export default {
             allowedMentions: { roles: raid ? [R.pingRaid] : [] } });
           const x = link.replace('twitter.com', 'x.com');
           const tgNote = await toTelegram(tg, `🐔 ${tgEsc(note || 'New post from MEKANEKO on X. Like, repost, reply!')}\n${tgEsc(x)}`, { preview: true });
-          logTo(it.guild, `🐔 <@${it.user.id}> posted to <#${C.xfeed}>${raid ? ' with a raid ping' : ''}${tg && !tgNote ? ' and the Telegram channel' : ''}: ${link}`);
-          return it.editReply(`Posted in <#${C.xfeed}>${raid ? ' and pinged @Raid' : ''}${tgNote || ', and in the Telegram channel'}.`);
+          logTo(it.guild, `🐔 <@${it.user.id}> posted to <#${C.xfeed}>${raid ? ' with a raid ping' : ''}${tg && !tgNote ? ' and the Telegram group' : ''}: ${link}`);
+          return it.editReply(`Posted in <#${C.xfeed}>${raid ? ' and pinged @Raid' : ''}${tgNote || ', and in the Telegram group'}.`);
         }
         if (it.isChatInputCommand() && it.commandName === 'announce') {
           if (!ctx.isTeam(it.member)) return it.reply({ content: 'Team only.', ephemeral: true });
@@ -147,8 +147,8 @@ export default {
               ...(/^https:\/\/\S+$/.test(image) ? { image: { url: image } } : {}), footer: { text: 'KOKEKO · MEKANEKO news' }, timestamp: new Date().toISOString() }] });
           await msg.crosspost().catch(() => {});                       // reaches servers that follow #announcements
           const tgNote = await toTelegram(tg, `📣 <b>${tgEsc(title)}</b>\n\n${toTgHtml(body)}\n\n<i>KOKEKO · MEKANEKO news</i>`, { image: /^https:\/\/\S+$/.test(image) ? image : undefined, pin: true });
-          logTo(it.guild, `🐔 <@${it.user.id}> announced: **${title}** ${msg.url}${tg && !tgNote ? ' (also in the Telegram channel)' : ''}`);
-          return it.editReply(`Announced in <#${C.announcements}>${tgNote || ', and pinned in the Telegram channel'}.`);
+          logTo(it.guild, `🐔 <@${it.user.id}> announced: **${title}** ${msg.url}${tg && !tgNote ? ' (also in the Telegram group)' : ''}`);
+          return it.editReply(`Announced in <#${C.announcements}>${tgNote || ', and pinned in the Telegram group'}.`);
         }
       } catch (e) { ctx.log('kokeko', e.message); const t = 'Something went wrong. Check my permissions in that channel.'; if (it.deferred) it.editReply(t).catch(() => {}); else if (it.isRepliable() && !it.replied) it.reply({ content: t, ephemeral: true }).catch(() => {}); }
     });
@@ -159,10 +159,10 @@ export default {
         .addStringOption((o) => o.setName('link').setDescription('Link to the post on X').setRequired(true))
         .addStringOption((o) => o.setName('note').setDescription('One line above the link (optional)'))
         .addBooleanOption((o) => o.setName('raid').setDescription('Ping @Raid (default: yes)'))
-        .addBooleanOption((o) => o.setName('telegram').setDescription('Also post in the Telegram channel (default: yes)')),
+        .addBooleanOption((o) => o.setName('telegram').setDescription('Also post in the Telegram group (default: yes)')),
       new SlashCommandBuilder().setName('announce').setDescription('Team: post an announcement in #announcements').setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
         .addBooleanOption((o) => o.setName('ping').setDescription('Ping @Announcements (default: yes)'))
-        .addBooleanOption((o) => o.setName('telegram').setDescription('Also post and pin in the Telegram channel (default: yes)')),
+        .addBooleanOption((o) => o.setName('telegram').setDescription('Also post and pin in the Telegram group (default: yes)')),
     ];
   },
 };

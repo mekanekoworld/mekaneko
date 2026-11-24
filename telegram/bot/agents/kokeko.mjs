@@ -10,11 +10,11 @@ const X_POST = /^https:\/\/(?:www\.)?(?:x|twitter)\.com\/\w{1,15}\/status\/\d+\S
 export default {
   updates: ['message', 'my_chat_member'],
   commands: [
-    { command: 'announce', en: 'Team: post and pin an announcement in the channel', ja: 'チーム: チャンネルにお知らせを投稿して固定', admin: true, dmAllow: true },
+    { command: 'announce', en: 'Team: post and pin an announcement', ja: 'チーム: お知らせを投稿して固定', admin: true, dmAllow: true },
     { command: 'x', en: 'Team: share a MEKANEKO post from X', ja: 'チーム: X の投稿を共有', admin: true, dmAllow: true },
   ],
-  intro: ['🐔 I’m KOKEKO, MEKANEKO’s news agent. Announcements go up in the MEKANEKO Telegram channel.',
-    '🐔 MEKANEKO のニュース担当 KOKEKO です。お知らせは MEKANEKO の Telegram チャンネルに投稿します。'],
+  intro: ['🐔 I’m KOKEKO, MEKANEKO’s news agent. Announcements go up and get pinned in the MEKANEKO Telegram group.',
+    '🐔 MEKANEKO のニュース担当 KOKEKO です。お知らせは MEKANEKO の Telegram グループに投稿して固定します。'],
   setup(bot, ctx) {
     const api = bot.api;
     const target = () => ctx.channelId || ctx.chatId;

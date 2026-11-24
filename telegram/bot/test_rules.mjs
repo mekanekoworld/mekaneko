@@ -20,7 +20,7 @@ ok('hidden text_link targets are seen', () => {
 });
 ok('our Telegram invite passes, other Telegram links count as invites (even at level 50)', () => {
   assert.equal(linkVerdict(LINKS.telegramUrl), null);
-  assert.equal(kind(ent('t.me/+kzi75X8ljrU3Yjg1')), null);
+  assert.equal(kind(ent('t.me/mekanekoworld')), null);
   assert.equal(kind(ent('https://t.me/+KZI75X8LJRU3YJG1')), 'invite');   // invite codes are case-sensitive
   assert.equal(kind(ent('https://t.me/joinchat/AAAA'), 50), 'invite');
   assert.equal(kind(ent('https://t.me/somechannel')), 'invite');

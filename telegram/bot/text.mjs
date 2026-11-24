@@ -43,7 +43,7 @@ export function linksText(ja) {
   const ca = /^0x[0-9a-fA-F]{40}$/.test(LINKS.ca) ? LINKS.ca : '';
   return [ja ? '<b>MEKANEKO 公式リンク</b>' : '<b>Official MEKANEKO links</b>', '',
     row('🌐 Website', LINKS.worldUrl), row('🧭 Dashboard', LINKS.appUrl), row('💬 Discord', LINKS.discordUrl),
-    row(ja ? '✈️ Telegram チャンネル' : '✈️ Telegram channel', LINKS.telegramUrl), row('𝕏 X', LINKS.xUrl), ...(LINKS.githubUrl ? [row('💻 GitHub', LINKS.githubUrl)] : []), '',
+    row(ja ? '✈️ Telegram グループ' : '✈️ Telegram group', LINKS.telegramUrl), row('𝕏 X', LINKS.xUrl), ...(LINKS.githubUrl ? [row('💻 GitHub', LINKS.githubUrl)] : []), '',
     ca ? `🪙 ${ja ? 'コントラクト' : 'Contract'} ($MEKANEKO · Robinhood Chain):\n<code>${ca}</code>`
       : (ja ? '🪙 <b>$MEKANEKO はまだ発行されていません。</b>ここに表示される前に出回る CA はすべて偽物です。' : '🪙 <b>$MEKANEKO is not live yet.</b> Any contract address you see before it appears here is fake.'),
     ...(LINKS.buyUrl ? [row(ja ? '🛒 購入' : '🛒 Buy', LINKS.buyUrl)] : []), '',

@@ -22,7 +22,7 @@ const SCAM = keywordRegex(AUTOMOD.scamWords);
 
 const TG_HOSTS = new Set(['t.me', 'telegram.me', 'telegram.dog']);
 const RISKY_FILE = /\.(apk|exe|scr|bat|cmd|com|msi|js|jse|vbs|ps1|jar|zip|rar|7z|html?|svg|lnk|dmg|pkg|iso)$/i;
-const pathOf = (u) => u.pathname.replace(/\/+$/, '');          // invite codes are case-sensitive: compare as written
+const pathOf = (u) => { const p = u.pathname.replace(/\/+$/, ''); return /^\/(\+|joinchat\/)/i.test(p) ? p : p.toLowerCase(); };   // invite codes are case-sensitive, @usernames are not
 const own = (url) => { try { return new URL(url); } catch { return null; } };
 const OWN_TG = own(LINKS.telegramUrl), OWN_DC = own(LINKS.discordUrl);
 

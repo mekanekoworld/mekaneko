@@ -91,7 +91,7 @@ export function liveFacts(cfg = {}) {
     '- Agents: live on the website (5 free questions a day per person) and with /ask in Discord (5 a day, 10 from level 10). AI answers in Telegram are coming soon.',
     '- Not live yet: wallet sign-in and holder quotas, trading or launching through the agents, the public GitHub repository' + (cfg.githubUrl ? ' (now live)' : '') + '.',
     '- Roadmap: season 0 (BOOT) now; launch opens season 1 (VOLT), and season 2 (MUSEUM) may come with it. Later seasons are announced by the team. Never promise dates.',
-    `- Official links: website ${link(cfg.worldUrl)}, dashboard ${DASH}, X ${link(cfg.xUrl)}, Discord ${link(cfg.discordUrl)}, Telegram channel ${link(cfg.telegramUrl)}, GitHub ${link(cfg.githubUrl)}. Status: ${DASH}/en/status/. Verify: ${DASH}/en/verify/.`,
+    `- Official links: website ${link(cfg.worldUrl)}, dashboard ${DASH}, X ${link(cfg.xUrl)}, Discord ${link(cfg.discordUrl)}, Telegram group ${link(cfg.telegramUrl)}, GitHub ${link(cfg.githubUrl)}. Status: ${DASH}/en/status/. Verify: ${DASH}/en/verify/.`,
   ].join('\n');
 }
 

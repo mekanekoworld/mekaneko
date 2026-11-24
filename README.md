@@ -9,7 +9,7 @@ This repository is the public part of the code, published so anyone can check wh
 - Verify (contract, rules, wallets, audits): https://app.mekaneko.com/en/verify/
 - Status: https://app.mekaneko.com/en/status/
 - The Record (every public call, graded): https://app.mekaneko.com/en/record/
-- X: https://x.com/mekanekoworld · Discord: https://discord.gg/42sGtf5Xx2 · Telegram: https://t.me/+kzi75X8ljrU3Yjg1
+- X: https://x.com/mekanekoworld · Discord: https://discord.gg/42sGtf5Xx2 · Telegram: https://t.me/mekanekoworld
 
 ## What is here
 

@@ -1,5 +1,5 @@
-// Posting into the MEKANEKO Telegram channel from the Discord agents: KOKEKO's /x and /announce on Discord reach both places.
-// Uses the Telegram KOKEKO bot (TELEGRAM_TOKEN_KOKEKO) and the channel id (TELEGRAM_CHANNEL_ID); without them it stays off.
+// Posting into the MEKANEKO Telegram group (or channel) from the Discord agents: KOKEKO's /x and /announce on Discord reach both places.
+// Uses the Telegram KOKEKO bot (TELEGRAM_TOKEN_KOKEKO) and TELEGRAM_CHANNEL_ID (the channel, or the group when there is no channel); without them it stays off.
 // It only sends. The Telegram service (telegram/bot) owns the bot's updates, so the two never fight over getUpdates.
 const env = (k) => process.env[k] || '';
 export const tgReady = () => !!(env('TELEGRAM_TOKEN_KOKEKO') && env('TELEGRAM_CHANNEL_ID'));
