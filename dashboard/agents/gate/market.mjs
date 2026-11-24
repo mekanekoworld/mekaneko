@@ -12,3 +12,5 @@ export function indexRow() { return null; }
 export async function getRobinhoodToken(token) {
   return cached(`t:${String(token).toLowerCase()}`, 30_000, async () => { const p = (await pairs(token))[0]; return p ? { token: { liquidityUsd: p.liquidity?.usd || null } } : null; });
 }
+// Sentry's paper-liquidity guard: every Robinhood Chain pair of a token (DexScreener, cached 30 s)
+export async function dsTokenPairs(token) { return cached(`p:${String(token).toLowerCase()}`, 30_000, () => pairs(token)); }

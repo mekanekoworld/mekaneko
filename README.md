@@ -16,6 +16,7 @@ This repository is the public part of the code, published so anyone can check wh
 | --- | --- |
 | `dashboard/agents/` | The agent server: the fifteen agents, their instructions and voices, their tools (Robinhood Chain RPC, GeckoTerminal, DexScreener), daily limits, and the live facts they read from the site config. |
 | `dashboard/agents/gate/` | The Gate SHURU runs before any "is it safe to buy" answer: route, price impact, pool depth, fees, a simulated buy and sell, transfer tax, contract red flags. Read-only. Ported from [Troya Agent](https://github.com/troyaagent/troya-agent) (MIT); its license is in that folder. |
+| `dashboard/agents/gate/sentry.mjs` | Sentry: every new Pons launch goes through the Gate; only coins with real buying (0.5 ETH+ from 25+ independent wallets, no copies, no look-alike names) are posted by KOKEKO. Ported from Troya Agent (MIT). |
 | `dashboard/app/` | The app pages we wrote ourselves: agent console, Nekopult (sample data until its contracts are live), docs, status, verify. |
 | `discord/bot/` | The six Discord agents: PYON (levels), RYUJIN (`/ask`), HACHI (FAQ), SHURU (`/check`, scam watch), KOKEKO (news, `/trend`, Market Omikuji), MEEMEE (fortunes, meme contests). |
 | `telegram/bot/` | The same agents for Telegram: captcha, scam and link filter, FAQ, levels, announcements. |

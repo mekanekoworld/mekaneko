@@ -4,6 +4,7 @@
 import { GatewayIntentBits as I, Events, SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
 import { tgReady, tgPost, toTgHtml, esc as tgEsc } from '../telegram.mjs';
 import { trendCard, omikujiCard } from '../market.mjs';
+import { sentryEmbed, recapEmbed } from '../sentry-post.mjs';
 
 const X_POST = /^https:\/\/(?:www\.)?(?:x|twitter)\.com\/\w{1,15}\/status\/\d+/;
 
@@ -34,6 +35,30 @@ export default {
       state.set({ ...state.get(), omikujiDay: day }); ctx.log('kokeko', `market omikuji posted for ${day}`);
     };
     client.once(Events.ClientReady, () => { omikuji().catch(() => {}); setInterval(() => omikuji().catch(() => {}), 10 * 60_000); });
+
+    // Sentry (ported from Troya Agent, MIT; vendor/gate/sentry.mjs): every new Pons launch goes through the Gate, and the ones
+    // with real buying (0.5 ETH+ from 25+ independent wallets, no copies, no look-alike names) are posted. SENTRY=off stops it;
+    // SENTRY_CHANNEL picks the channel key (default: daily-brief, where KOKEKO may post).
+    if (process.env.SENTRY !== 'off') client.once(Events.ClientReady, async () => {
+      let S;
+      try { S = await import('../vendor/gate/sentry.mjs'); } catch (e) { ctx.log('kokeko sentry', `not started: ${e.message}`); return; }
+      const st = ctx.json('sentry.json', {});
+      const channel = async () => { const id = C[process.env.SENTRY_CHANNEL || 'brief']; return client.channels.cache.get(id) || client.channels.fetch(id).catch(() => null); };
+      await S.start({
+        store: { read: async (fb) => ({ ...fb, ...st.get() }), write: async (s) => st.set(s) },
+        log: (...a) => ctx.log('sentry', ...a),
+        recapUtcHour: 13,
+        onPost: async (r) => {
+          const ch = await channel(); if (!ch) throw new Error('channel not found');
+          await ch.send({ allowedMentions: { parse: [] }, embeds: [sentryEmbed(r, S)] });
+        },
+        onRecap: async (d) => {
+          const ch = await channel(); if (!ch) return;
+          await ch.send({ allowedMentions: { parse: [] }, embeds: [recapEmbed(d, S)] });
+        },
+      });
+      ctx.log('kokeko', `sentry watching Pons launches -> #${process.env.SENTRY_CHANNEL || 'brief'}`);
+    });
 
     client.on(Events.InteractionCreate, async (it) => {
       if (it.guildId !== ctx.ids.guild) return;

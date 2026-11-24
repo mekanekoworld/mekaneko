@@ -3,6 +3,12 @@
   "private": true,
   "type": "module",
   "description": "MEKANEKO's Discord agents. pyon.mjs = levels.",
-  "scripts": { "start": "node pyon.mjs", "test": "node test_levels.mjs" },
-  "dependencies": { "discord.js": "14.28.1" }
+  "scripts": {
+    "start": "node pyon.mjs",
+    "test": "node test_levels.mjs"
+  },
+  "dependencies": {
+    "discord.js": "14.28.1",
+    "ethers": "^6.13.4"
+  }
 }
