@@ -208,7 +208,8 @@ export async function handle(req, res, url, siteRoot) {
       const d = all[url.searchParams.get('id') || '']; return d ? json(res, 200, d) : json(res, 404, { error: 'draft not found' });
     }
     if (p === '/api/agents/chat' && req.method === 'POST') return chat(req, res, siteRoot);
-    if (p.startsWith('/api/record') || p.startsWith('/api/seal')) {
+    if (p.startsWith('/api/record') || p.startsWith('/api/seal') || p.startsWith('/api/watchfire')) {
+      ledger.site(siteRoot);
       let body = null;
       if (req.method === 'POST') { try { body = JSON.parse(await readBody(req)); } catch { return json(res, 400, { error: 'bad json' }); } }
       const out = await ledger.route(p, req.method, url.searchParams, body, isInternal(req));

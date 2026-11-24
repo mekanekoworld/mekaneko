@@ -165,6 +165,9 @@ export async function noteVerdict({ agent = "shuru", token, symbol = null, worst
   return { receipt: rec?.hash || null, verdict, graded: d.entries[k].receipts?.[0] === rec?.hash };
 }
 
+/** the Sentry calls of the last `ms` (Watchfire keeps watching them) */
+export const callsSince = (ms) => (DIR ? Object.values(state().entries).filter((c) => c.kind === "call" && Date.now() - c.at < ms).map((c) => ({ token: c.token, symbol: c.symbol, at: c.at })) : []);
+
 /* ---------- loops ---------- */
 async function tick() {
   if (busy || !DIR) return;

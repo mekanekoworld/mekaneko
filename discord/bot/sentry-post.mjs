@@ -30,3 +30,26 @@ export function recapEmbed(d, S) {
               + `${d.nobuys} had an empty or dust-only curve, so there was nothing to test.\n\nCheck any coin yourself: ask SHURU with /ask or /check.`,
             footer: { text: 'Automated checks, not endorsements.' } };
 }
+
+// Watchfire alerts (vendor/gate/watchfire.mjs, ported from Troya Agent, MIT): big wallets moving in a coin Sentry posted, or in $MEKANEKO
+const WF = {
+  whale: { icon: '🐋', color: 0xFF3B30, title: 'Whale sale', note: 'One wallet sold a big slice of the supply in a single trade.' },
+  gather: { icon: '🔥', color: 0xFF3B30, title: 'Wallets gathering coins', note: 'Many wallets sent their coins to one wallet within seconds, the usual step before a big sale.' },
+  velocity: { icon: '⚠️', color: 0xFF8A00, title: 'Holders selling fast', note: 'Sellers far outnumber buyers right now.' },
+  weight: { icon: '⚖️', color: 0xF5B342, title: 'Weight in few hands', note: 'A large share of the supply sits with one wallet or came through one trading bot.' },
+};
+export function watchfireEmbed(a) {
+  const k = WF[a.kind] || WF.whale, ex = 'https://robinhoodchain.blockscout.com';
+  const why = a.reasons?.includes('mekaneko') ? '$MEKANEKO' : 'a coin KOKEKO posted in the last 24 hours';
+  const lines = [
+    `**${k.title}:** ${a.detail}.`,
+    k.note,
+    a.wallet ? `Wallet: [${a.wallet.slice(0, 6)}…${a.wallet.slice(-4)}](${ex}/address/${a.wallet})` : null,
+    a.tx && /^0x[0-9a-f]{64}$/i.test(a.tx) ? `Transaction: [${a.tx.slice(0, 10)}…](${ex}/tx/${a.tx})` : null,
+    `\`${a.token}\``,
+    `[Pons](https://ponsfamily.com/launchpad/${a.token.toLowerCase()}) · [Blockscout](${ex}/token/${a.token}) · [DexScreener](https://dexscreener.com/robinhood/${a.token})${a.receipt ? ` · [Receipt](https://app.mekaneko.com/en/record/?r=${a.receipt})` : ''}`,
+    `_Watched because it is ${why}. Ask SHURU with /ask before you trade it._`,
+  ].filter(Boolean);
+  return { color: k.color, title: `${k.icon} Watchfire · ${a.symbol ? '$' + a.symbol : 'unnamed'}`.slice(0, 250), description: lines.join('\n').slice(0, 4000),
+    footer: { text: 'KOKEKO Watchfire · patterns, not proof. Not financial advice. Never share your seed phrase.' } };
+}

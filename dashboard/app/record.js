@@ -15,6 +15,7 @@
     '<b>エージェントの公開の判断を、すべて公開で採点します。</b>KOKEKO の Sentry がコインを投稿したとき、SHURU が判定を出したとき、その場で価格を記録し、24時間後にもう一度確かめます。どれにも Seal の署名つきレシートがあり、ひとつ前のレシートとつながっているので、あとから書き換えればわかります。');
   $('rcCardsH').innerHTML = t('Report cards<small>Graded calls only. Nothing here is a forecast or financial advice.</small>', '成績表<small>採点済みの判断だけを数えます。予測でも投資助言でもありません。</small>');
   $('rcCallsH').innerHTML = t('KOKEKO · Sentry calls<small>Coins Sentry posted in Discord after passing the Gate with real buying.</small>', 'KOKEKO · Sentry の投稿<small>Gate を通過し、実際の買いがあったコインとして Sentry が Discord に投稿したもの。</small>');
+  $('rcAlertsH').innerHTML = t('KOKEKO · Watchfire alerts<small>Big wallets moving in a coin Sentry posted (watched for 24 hours) or in $MEKANEKO. Patterns, not proof.</small>', 'KOKEKO · Watchfire アラート<small>Sentry が投稿したコイン（24時間）と $MEKANEKO で、大口ウォレットが動いたとき。パターンであり、証拠ではありません。</small>');
   $('rcVerdictsH').innerHTML = t('Gate verdicts<small>The first verdict an agent gave on a token each day.</small>', 'Gate の判定<small>各エージェントがその日に最初に出した判定。</small>');
   $('rcAnswersH').innerHTML = t('Questions answered<small>On the website and with /ask in Discord.</small>', '回答した質問<small>ウェブサイトと Discord の /ask で。</small>');
   $('rcSealH').innerHTML = t('The Seal<small>A signed, hash-chained receipt for every call, verdict and grade.</small>', 'Seal<small>すべての投稿・判定・採点に、署名つきでハッシュチェーンにつながったレシート。</small>');
@@ -76,6 +77,12 @@
       d.calls.map((c) => `<tr><td>${coin(c)}</td><td>${c.post ? `<a href="${esc(c.post)}" target="_blank" rel="noopener">${when(c.at)}</a>` : when(c.at)}</td><td class="num">${usd(c.priceAtCall)}</td>
         <td class="num">${pc(c.change1h)}</td><td class="num">${later(c)}</td><td class="num">${c.peakX == null ? '—' : nf(c.peakX, 2) + '×'}</td><td>${result(c)}</td><td>${rcpt(c)}</td></tr>`),
       t('No calls yet. Sentry posts only coins that pass the Gate with real buying (0.5 ETH or more from 25 or more independent wallets), so quiet days happen.', 'まだ投稿はありません。Sentry が投稿するのは、Gate を通過し実際の買い（25以上の独立したウォレットから0.5 ETH以上）があったコインだけなので、静かな日もあります。'));
+    const WFK = { whale: ['bad', t('Whale sale', '大口の売り')], gather: ['bad', t('Wallets gathering', 'ウォレット集約')], velocity: ['warn', t('Selling fast', '急速な売り')], weight: ['warn', t('Weight in few hands', '少数に集中')] };
+    $('rcAlerts').innerHTML = table([[t('Coin', 'コイン')], [t('When', '日時')], [t('Signal', 'シグナル')], [t('What happened', '内容')], [t('Transaction', 'トランザクション')], [t('Receipt', 'レシート')]],
+      (d.alerts || []).map((a) => { const k = WFK[a.kind] || ['wait', a.kind];
+        return `<tr><td>${coin({ token: a.token, symbol: a.symbol })}</td><td>${when(a.at)}</td><td>${chip(k[0], k[1])}</td><td style="white-space:normal;min-width:26rem">${esc(a.detail)}</td>
+          <td>${a.tx && /^0x[0-9a-fA-F]{64}$/.test(a.tx) ? `<a href="${EXP}/tx/${esc(a.tx)}" target="_blank" rel="noopener">${esc(a.tx.slice(0, 10))}…</a>` : '<span class="dim">—</span>'}</td><td>${rcpt({ receipts: a.receipt ? [a.receipt] : [] })}</td></tr>`; }),
+      t('No alerts yet. Watchfire watches every coin KOKEKO posts for 24 hours (and $MEKANEKO after launch) and speaks up when one wallet sells 5% or more of the supply, when wallets gather coins into one wallet, or when holders sell fast.', 'まだアラートはありません。Watchfire は KOKEKO が投稿したコインを24時間（ローンチ後は $MEKANEKO も）見守り、1つのウォレットが供給量の5%以上を売ったとき、複数のウォレットが1つのウォレットにコインを集めたとき、ホルダーが急速に売っているときに知らせます。'));
     $('rcVerdicts').innerHTML = table([[t('Agent', 'エージェント')], [t('Coin', 'コイン')], [t('Verdict', '判定')], [t('Given', '判定日時')], [t('Price then', '判定時の価格'), 1], [t('24 h', '24時間'), 1], [t('Lowest', '最安'), 1], [t('Result', '結果')], [t('Receipt', 'レシート')]],
       d.verdicts.map((c) => `<tr><td>${esc(name(c.agent))}</td><td>${coin(c)}</td><td>${verdictChip(c.verdict)}</td><td>${when(c.at)}</td><td class="num">${usd(c.priceAtCall)}</td>
         <td class="num">${later(c)}</td><td class="num">${pc(c.lowPct)}</td><td>${result(c)}</td><td>${rcpt(c)}</td></tr>`),
@@ -85,7 +92,7 @@
     $('rcFoot').textContent = t(`Updated ${new Date(d.updatedAt).toISOString().slice(11, 19)} UTC · refreshes every minute · raw data: /api/record`, `${new Date(d.updatedAt).toISOString().slice(11, 19)} UTC に更新 · 1分ごとに更新 · 元データ：/api/record`);
   }
 
-  const KIND = { 'gate-check': t('Gate check', 'Gate チェック'), 'sentry-call': t('Sentry call', 'Sentry の投稿'), 'record-grade': t('Grade', '採点') };
+  const KIND = { 'gate-check': t('Gate check', 'Gate チェック'), 'sentry-call': t('Sentry call', 'Sentry の投稿'), 'record-grade': t('Grade', '採点'), watchfire: t('Watchfire alert', 'Watchfire アラート') };
   function checks(c) {
     const mark = (ok, label) => `<li><span>${label}</span><span class="${ok ? 'up' : ok === null ? 'dim' : 'down'}">${ok ? '✓' : ok === null ? '—' : '✗'}</span></li>`;
     return `<ul class="info-links">${mark(c.hash, t('Hash matches the receipt', 'ハッシュが内容と一致'))}${mark(c.ecdsa, t('ECDSA signature by the MEKANEKO signer', 'MEKANEKO 署名者の ECDSA 署名'))}${mark(c.mldsa, t('ML-DSA-65 signature (post-quantum)', 'ML-DSA-65 署名（耐量子）'))}${mark(c.linked, t('Linked to the receipt before it', 'ひとつ前のレシートとつながっている'))}</ul>`;

@@ -5,17 +5,23 @@
 //   GET  /api/seal/receipts?day=&limit=&kind=   receipts of a day, newest first
 //   GET  /api/seal/r/<hash>          one receipt and its checks
 //   POST /api/seal/verify            { receipt } → hash, ECDSA, ML-DSA and link checks
+//   GET  /api/watchfire              coins watched now and the latest alerts (whale sales, gathering, fast selling, weight)
+//   GET  /api/watchfire/alerts?since=   alerts after a time (KOKEKO posts them in Discord)
+//   GET  /api/watchfire/<token>      one coin's Watchfire level (starts watching it for 30 minutes)
 import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import * as seal from './gate/seal.mjs';
 import * as record from './gate/record.mjs';
+import * as watchfire from './gate/watchfire.mjs';
 
 let DATA = null, stats = null, cache = { at: 0, key: '', v: null };
 const day = () => new Date().toISOString().slice(0, 10);
 
+export function site(siteRoot) { watchfire.setSite(siteRoot); }
 export function start(dataDir) {
   DATA = dataDir;
   seal.setDir(dataDir); record.start(dataDir); seal.startAnchor();
+  watchfire.start({ dataDir, siteRoot: process.env.SITE_ROOT || null, calls: record.callsSince });
   try { stats = JSON.parse(readFileSync(join(DATA, 'stats.json'), 'utf8')); } catch { stats = { total: {}, days: {} }; }
 }
 
@@ -41,7 +47,7 @@ export async function route(p, method, q, body, internal) {
     const limit = q.get('limit') || '100';
     if (cache.v && cache.key === limit && Date.now() - cache.at < 20_000) return { body: cache.v };
     const s = seal.sealView();
-    const v = { ...record.recordView({ limit }), answers: answers(), seal: { seq: s.seq, head: s.head, today: s.today, signer: s.keys.ecdsa, anchor: s.anchor, lastAnchor: s.lastAnchor } };
+    const v = { ...record.recordView({ limit }), alerts: watchfire.alerts(0, 50), answers: answers(), seal: { seq: s.seq, head: s.head, today: s.today, signer: s.keys.ecdsa, anchor: s.anchor, lastAnchor: s.lastAnchor } };
     cache = { at: Date.now(), key: limit, v };
     return { body: v };
   }
@@ -51,6 +57,14 @@ export async function route(p, method, q, body, internal) {
     for (const c of list) await record.noteCall(c).catch(() => null);           // known tokens are skipped, so a re-sync is harmless
     cache.v = null;
     return { body: { ok: true, seen: list.length } };
+  }
+  if (p === '/api/watchfire' && method === 'GET') return { body: { name: 'MEKANEKO Watchfire', rules: watchfire.RULES, watching: watchfire.watching(), alerts: watchfire.alerts(0, 30) } };
+  if (p === '/api/watchfire/alerts' && method === 'GET') return { body: { alerts: watchfire.alerts(Number(q.get('since')) || 0, 20) } };
+  if (p.startsWith('/api/watchfire/') && method === 'GET') {
+    const t = p.slice('/api/watchfire/'.length);
+    if (!/^0x[0-9a-fA-F]{40}$/.test(t)) return { status: 400, body: { error: 'That is not a token address.' } };
+    const s = await watchfire.look(t, 20_000);
+    return s ? { body: s } : { status: 429, body: { error: 'Watchfire is busy watching other coins. Try again in a few minutes.' } };
   }
   if (p === '/api/seal' && method === 'GET') return { body: seal.sealView() };
   if (p === '/api/seal/receipts' && method === 'GET') return { body: seal.receiptsOf(q.get('day'), q.get('limit'), q.get('kind')) };

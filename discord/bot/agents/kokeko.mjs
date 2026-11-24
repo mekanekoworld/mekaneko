@@ -4,7 +4,7 @@
 import { GatewayIntentBits as I, Events, SlashCommandBuilder, PermissionFlagsBits, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
 import { tgReady, tgPost, toTgHtml, esc as tgEsc } from '../telegram.mjs';
 import { trendCard, omikujiCard } from '../market.mjs';
-import { sentryEmbed, recapEmbed } from '../sentry-post.mjs';
+import { sentryEmbed, recapEmbed, watchfireEmbed } from '../sentry-post.mjs';
 
 // The Record (graded in public on app.mekaneko.com/en/record/) lives in the agent API on this VPS: every Sentry post is sent there
 // at once with the price read at the post, and the posts of the last 24 hours are re-sent every 5 minutes (the API skips known ones).
@@ -82,6 +82,28 @@ export default {
         if (calls.length) toRecord(calls).catch((e) => ctx.log('kokeko record sync', e.message));
       };
       setTimeout(sync, 30_000); setInterval(sync, 5 * 60_000);
+      // Watchfire runs in the agent API (it watches the coins above for 24 hours, and $MEKANEKO): its alerts are posted here
+      const wf = ctx.json('watchfire.json', {});
+      if (!wf.get().since) wf.set({ since: Date.now() });                     // first start: no back-posting of older alerts
+      let wfBusy = false;
+      const wfPoll = async () => {
+        if (wfBusy || process.env.WATCHFIRE === 'off') return;
+        wfBusy = true;
+        try {
+          const r = await fetch(`${API}/api/watchfire/alerts?since=${wf.get().since || 0}`, { signal: AbortSignal.timeout(15_000), headers: { 'x-mk-proxy': process.env.MK_PROXY_SECRET || '' } });
+          if (!r.ok) return;
+          const list = ((await r.json()).alerts || []).sort((a, b) => a.at - b.at);
+          for (const a of list) {
+            if (!a.receipt && Date.now() - a.at < 20_000) break;               // give the Seal a moment to sign it; the next round posts it
+            const ch = await channel(); if (!ch) break;
+            await ch.send({ allowedMentions: { parse: [] }, embeds: [watchfireEmbed(a)] });
+            wf.set({ since: a.at });
+            ctx.log('kokeko', `watchfire ${a.kind} $${a.symbol || '?'} posted`);
+          }
+        } catch (e) { ctx.log('kokeko watchfire', e.message); }
+        finally { wfBusy = false; }
+      };
+      setInterval(wfPoll, 20_000);
     });
 
     client.on(Events.InteractionCreate, async (it) => {

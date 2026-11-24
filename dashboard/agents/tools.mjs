@@ -106,9 +106,11 @@ export const TOOLS = {
     async run({ token, amount_eth = 0.01 }, ctx = {}) {
       const g = await import('./gate/robinhood.mjs');
       const amt = String(Math.min(5, Math.max(0.0001, Number(amount_eth) || 0.01)));
-      const [gate, health] = await Promise.all([
+      const wfRead = import('./gate/watchfire.mjs').then((m) => m.look(token, 20_000)).catch(() => null);   // read alongside the Gate
+      const [gate, health, watchfire] = await Promise.all([
         g.gateCheck({ tokenIn: 'ETH', tokenOut: token, amountIn: amt }).catch((e) => ({ error: e.message })),
         g.tokenHealth(token).catch((e) => ({ error: e.message })),
+        wfRead,
       ]);
       const worst = (gate.checks || []).some((c) => c.status === 'fail') ? 'fail' : (gate.checks || []).some((c) => c.status === 'warn') ? 'warn' : gate.checks ? 'pass' : 'unknown';
       // The Record + the Seal: every check gets a signed receipt; the first verdict per agent, token and day is graded 24 h later
@@ -118,8 +120,9 @@ export const TOOLS = {
       const receipt = noted?.receipt ? { hash: noted.receipt, url: `https://app.mekaneko.com/${ctx.lang === 'ja' ? 'ja' : 'en'}/record/?r=${noted.receipt}`, graded_tomorrow: !!noted.graded } : null;
       return { source: 'MEKANEKO Gate on Robinhood Chain RPC (eth_call simulations; ported from Troya Agent, MIT)', tested_buy_eth: Number(amt),
         gate_passed: gate.pass ?? null, worst_check: worst, route: gate.quote?.route?.label || null, venue: gate.quote?.venue || null,
-        checks: gate.checks || [], gate_error: gate.error || null, health: health.error ? { error: health.error } : { risk: health.risk, flags: health.flags, proxy: health.proxy || null },
-        reading_guide: 'fail = DANGER, warn = CAUTION, all pass = SAFE (for this size, right now). Health flags add context; "skip" means not measurable.'
+        checks: gate.checks || [], gate_error: gate.error || null,
+        watchfire: watchfire ? { level: watchfire.level, why: watchfire.why, last_fire: watchfire.lastFire || null, top_holders: watchfire.top || [], note: watchfire.note } : { level: 'unavailable' }, health: health.error ? { error: health.error } : { risk: health.risk, flags: health.flags, proxy: health.proxy || null },
+        reading_guide: 'fail = DANGER, warn = CAUTION, all pass = SAFE (for this size, right now). Health flags add context; "skip" means not measurable. Watchfire: fire (a whale sale or wallets gathering coins in the last 10 minutes) or red (holders selling fast) must be named in the answer as a strong warning even when the Gate passes; amber means weight in few hands.'
           + (receipt ? ` This check has a signed receipt in the Seal (end your answer with the receipt link). ${receipt.graded_tomorrow ? 'This verdict is graded in public on The Record 24 hours from now.' : 'The first verdict on this token today is the one The Record grades.'}` : ''),
         receipt };
     } },
