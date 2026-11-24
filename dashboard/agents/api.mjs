@@ -6,6 +6,7 @@
 //   GET  /api/chain/status           -> chain health
 //   GET  /api/market/token?address=  -> one token's live market data (DexScreener)
 //   GET  /api/nekopult/draft?id=     -> a launch draft made by NISHIKI
+//   GET  /api/record, /api/seal/...  -> The Record (report cards per agent) and the Seal (signed receipts), see ledger.mjs
 // The Anthropic API key is read from ANTHROPIC_API_KEY or from "<tools>/.anthropic_key" (never sent to the browser).
 import Anthropic from '@anthropic-ai/sdk';
 import { readFileSync, existsSync, appendFileSync, mkdirSync, writeFileSync, renameSync } from 'node:fs';
@@ -14,11 +15,13 @@ import { fileURLToPath } from 'node:url';
 import { randomBytes, createHash } from 'node:crypto';
 import { AGENTS, MODEL, agentSystem, liveFacts } from './agents.mjs';
 import { TOOLS, validate, market } from './tools.mjs';
+import * as ledger from './ledger.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const TOOLS_ROOT = join(HERE, '..', '..');
 const DATA = join(HERE, 'data');
 const KEY_FILE = join(TOOLS_ROOT, '.anthropic_key');
+ledger.start(DATA);
 // USD per million tokens (OpenRouter's list = Anthropic's prices, checked 2026-11-24) and per web search/fetch call
 const PRICES = { opus: { in: 4, out: 20, cacheRead: 0.2, cacheWrite: 5 }, sonnet: { in: 2, out: 10, cacheRead: 0.1, cacheWrite: 2.5 },
   haiku: { in: 0.1, out: 0.5, cacheRead: 0.01, cacheWrite: 0.125 } };
@@ -85,6 +88,8 @@ function whoAsks(req) {
   const id = String(req.headers['x-mk-user'] || '') || `ip:${ip}`;
   return createHash('sha256').update(`${quotaToday().day}|${process.env.MK_PROXY_SECRET || 'local'}|${id}`).digest('hex').slice(0, 16);
 }
+const isInternal = (req) => !!req.headers['x-mk-internal'] && !req.headers['cf-ray'] && !req.headers['cf-connecting-ip']
+  && /^(127\.0\.0\.1|::1|::ffff:127\.0\.0\.1)$/.test(req.socket?.remoteAddress || '');
 const limitFor = (req) => Math.min(Math.max(Number(req.headers['x-mk-limit']) || DAILY_QUESTIONS, 1), 20);
 
 function toolsFor(id, or) {
@@ -105,7 +110,7 @@ async function runTool(use, ctx) {
     if (use.name === 'ask_agent') {
       const sub = use.input.agent;
       ctx.tool('ask_agent', 'start', AGENTS[sub].name);
-      const out = await runAgent(sub, [{ role: 'user', content: use.input.question }], { ...ctx, nested: true, text: () => {},
+      const out = await runAgent(sub, [{ role: 'user', content: use.input.question }], { ...ctx, agent: sub, nested: true, text: () => {},
         tool: (n, s, label) => ctx.tool(n, s, `${AGENTS[sub].name}${label ? ' · ' + label : ''}`) });
       ctx.tool('ask_agent', 'done', AGENTS[sub].name);
       return { content: out.text || '(no answer)' };
@@ -203,6 +208,12 @@ export async function handle(req, res, url, siteRoot) {
       const d = all[url.searchParams.get('id') || '']; return d ? json(res, 200, d) : json(res, 404, { error: 'draft not found' });
     }
     if (p === '/api/agents/chat' && req.method === 'POST') return chat(req, res, siteRoot);
+    if (p.startsWith('/api/record') || p.startsWith('/api/seal')) {
+      let body = null;
+      if (req.method === 'POST') { try { body = JSON.parse(await readBody(req)); } catch { return json(res, 400, { error: 'bad json' }); } }
+      const out = await ledger.route(p, req.method, url.searchParams, body, isInternal(req));
+      return json(res, out.status || 200, out.body);
+    }
     return json(res, 404, { error: 'not found' });
   } catch (e) {
     return json(res, 502, { error: e.message });
@@ -236,7 +247,7 @@ async function chat(req, res, siteRoot) {
   const send = (ev, data) => { if (!res.writableEnded) res.write(`event: ${ev}\ndata: ${JSON.stringify(data)}\n\n`); };
   let closed = false; const aborts = [];
   req.on('close', () => { closed = true; aborts.forEach((f) => f()); });
-  const ctx = { lang, siteRoot, dataDir: DATA, usage: { in: 0, out: 0, cacheRead: 0, cacheWrite: 0, web: 0 },
+  const ctx = { lang, siteRoot, dataDir: DATA, agent, source: String(req.headers['x-mk-user'] || '').startsWith('discord:') ? 'discord' : 'web', usage: { in: 0, out: 0, cacheRead: 0, cacheWrite: 0, web: 0 },
     closed: () => closed, onAbort: (f) => aborts.push(f),
     text: (d) => send('text', { d }), tool: (name, state, label) => send('tool', { name, state, label }), emit: (card) => send('card', card) };
   send('meta', { conversation: id, agent });
@@ -246,7 +257,7 @@ async function chat(req, res, siteRoot) {
   try {
     await runAgent(agent, conv.messages, ctx);
     const cost = costOf(ctx.usage);
-    Q.spent += cost; saveQuota();
+    Q.spent += cost; saveQuota(); ledger.answered(agent);
     mkdirSync(DATA, { recursive: true });
     appendFileSync(join(DATA, 'usage.jsonl'), JSON.stringify({ t: new Date().toISOString(), agent, model: modelNow(), ...ctx.usage, cost_usd: +cost.toFixed(4) }) + '\n');
     send('done', { usage: ctx.usage, cost_usd: +cost.toFixed(4), left: Math.max(0, limit - Q.users[me]), limit });

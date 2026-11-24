@@ -1,7 +1,7 @@
 // Verify page: everything a buyer or a project checker can verify without trusting us. Filled from /mekaneko/config.json
 // (the same file as the COPY CA button); a piece that does not exist yet says when it arrives instead of showing a placeholder.
 (() => {
-  const { t, esc, getJSON, header, toast } = window.MK;
+  const { t, esc, getJSON, header, toast, lang } = window.MK;
   header('');
   const $ = (id) => document.getElementById(id);
   document.title = t('Verify · MEKANEKO', '検証 · MEKANEKO');
@@ -34,6 +34,10 @@
       c.githubUrl ? t('The code behind the agents and the dashboard, public on GitHub.', 'エージェントとダッシュボードのコードを GitHub で公開しています。')
         : t('A public GitHub repository with the code behind the agents and the dashboard.', 'エージェントとダッシュボードのコードを公開する GitHub リポジトリ。'),
       c.githubUrl ? ext(c.githubUrl, 'GitHub') : ''));
+    out.push(card('The Record', chip('good', t('Live', 'ライブ')),
+      t('Every public call the agents make (KOKEKO’s Sentry posts, SHURU’s Gate verdicts) is graded 24 hours later, wins and misses alike, and each one has a signed receipt you can check.',
+        'エージェントの公開の判断（KOKEKO の Sentry 投稿、SHURU の Gate 判定）は、勝ちも負けも24時間後にすべて採点され、どれにも確認できる署名つきレシートがあります。'),
+      `<a href="/${lang}/record/">${t('Open The Record', 'The Record を開く')}</a>`));
     out.push(card(t('Nekopult contracts and audit', 'Nekopult のコントラクトと監査'), chip('wait', t('After audit', '監査後')),
       t('Not deployed yet. The contracts go to Robinhood Chain testnet first, then to an independent audit. The report is published here before Nekopult opens to creators.',
         'まだデプロイされていません。コントラクトはまず Robinhood Chain のテストネットへ、その後独立した監査を受けます。Nekopult がクリエイターに開放される前に、監査レポートをここで公開します。')));

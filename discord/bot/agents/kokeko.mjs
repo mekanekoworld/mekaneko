@@ -6,6 +6,21 @@ import { tgReady, tgPost, toTgHtml, esc as tgEsc } from '../telegram.mjs';
 import { trendCard, omikujiCard } from '../market.mjs';
 import { sentryEmbed, recapEmbed } from '../sentry-post.mjs';
 
+// The Record (graded in public on app.mekaneko.com/en/record/) lives in the agent API on this VPS: every Sentry post is sent there
+// at once with the price read at the post, and the posts of the last 24 hours are re-sent every 5 minutes (the API skips known ones).
+const API = process.env.MK_API_URL || 'http://127.0.0.1:8787';
+async function toRecord(calls) {
+  const r = await fetch(`${API}/api/record/calls`, { method: 'POST', signal: AbortSignal.timeout(20_000),
+    headers: { 'content-type': 'application/json', 'x-mk-proxy': process.env.MK_PROXY_SECRET || '', 'x-mk-internal': 'kokeko' }, body: JSON.stringify({ calls }) });
+  if (!r.ok) throw new Error(`record ${r.status}`);
+}
+async function priceAtPost(r) {
+  const p = r.pons;
+  if (!p || p.graduated || !(p.priceInPair > 0) || p.pair?.address !== 'native') return {};
+  const eth = await (await import('../vendor/gate/market.mjs')).getEthUsd().catch(() => null);
+  return eth ? { priceUsd: p.priceInPair * eth, priceSrc: 'pons-curve' } : {};
+}
+
 const X_POST = /^https:\/\/(?:www\.)?(?:x|twitter)\.com\/\w{1,15}\/status\/\d+/;
 
 export default {
@@ -50,7 +65,10 @@ export default {
         recapUtcHour: 13,
         onPost: async (r) => {
           const ch = await channel(); if (!ch) throw new Error('channel not found');
-          await ch.send({ allowedMentions: { parse: [] }, embeds: [sentryEmbed(r, S)] });
+          const msg = await ch.send({ allowedMentions: { parse: [] }, embeds: [sentryEmbed(r, S)] });
+          const at = Date.now();
+          priceAtPost(r).then((px) => toRecord([{ token: r.token, symbol: r.symbol || null, at, post: msg?.url || null, ...px }]))
+            .catch((e) => ctx.log('kokeko record', e.message));
         },
         onRecap: async (d) => {
           const ch = await channel(); if (!ch) return;
@@ -58,6 +76,12 @@ export default {
         },
       });
       ctx.log('kokeko', `sentry watching Pons launches -> #${process.env.SENTRY_CHANNEL || 'brief'}`);
+      const sync = () => {
+        const s = st.get() || {}, sym = Object.fromEntries((s.recent || []).map((x) => [String(x.token).toLowerCase(), x.symbol || null]));
+        const calls = Object.entries(s.posted || {}).map(([token, at]) => ({ token, symbol: sym[token] || null, at: Number(at) }));
+        if (calls.length) toRecord(calls).catch((e) => ctx.log('kokeko record sync', e.message));
+      };
+      setTimeout(sync, 30_000); setInterval(sync, 5 * 60_000);
     });
 
     client.on(Events.InteractionCreate, async (it) => {

@@ -20,7 +20,7 @@ export function sentryEmbed(r, S) {
   return { color: 0x3DDC84,
             title: `🛰️ New on Pons · ${r.symbol ? '$' + r.symbol : 'unnamed'}${r.name && r.name.toUpperCase() !== (r.symbol || '').toUpperCase() ? ` · ${r.name}` : ''}`.slice(0, 250),
             description: lines.join('\n').slice(0, 4000), ...(cid ? { thumbnail: { url: `https://ipfs.io/ipfs/${cid}` } } : {}),
-            footer: { text: 'KOKEKO Sentry · automated checks, not endorsements. Not financial advice. Never share your seed phrase.' } };
+            footer: { text: 'KOKEKO Sentry · automated checks, not endorsements. Every call is graded in public: app.mekaneko.com/en/record · Not financial advice. Never share your seed phrase.' } };
 }
 export function recapEmbed(d, S) {
   const checked = d.passed + d.caution + d.failed;

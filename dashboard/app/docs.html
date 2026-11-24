@@ -143,7 +143,7 @@
         <li class="done"><span>Built</span><p>MEKANEKO WORLD and its film · agent console on live data · Nekopult interface (demo data) · Robinhood Chain connection and wallet connect</p></li>
         <li class="now"><span>S0 · BOOT (now)</span><p>All fifteen agents live on the website and in Discord, with free daily questions · Discord community and Telegram channel · official X account · public GitHub repository · status and verification pages · faster way into the app · Terms of Service and legal review</p></li>
         <li><span>S1 · VOLT (launch)</span><p>$MEKANEKO fair launch on Pons, Robinhood Chain: the contract address appears on the website, X, Discord and Telegram at the same moment · wallet sign-in with a signature that cannot move funds · holders of 100 $MEKANEKO or more get more agent questions · SHURU contract checks and a KOKEKO alert channel</p></li>
-        <li><span>S2 · MUSEUM (with or soon after launch)</span><p>Every agent with its full tools and its own voice · The Record: a public report card of each agent's calls · live numbers on the agents' plaques in the MEKANEKO WORLD museum</p></li>
+        <li><span>S2 · MUSEUM (with or soon after launch)</span><p>Every agent with its full tools and its own voice · <a href="/en/record/">The Record</a>: a public report card of each agent's calls, with a signed receipt for each one (live now for KOKEKO and SHURU) · live numbers on the agents' plaques in the MEKANEKO WORLD museum</p></li>
         <li class="gate"><span>Gate · Nekopult audit report published</span></li>
         <li><span>S3 · MONUMENT (planned)</span><p>Nekopult v1 live: launch a coin in one transaction · trading fees collected automatically, creators claim theirs from a creator desk · a "Born on Nekopult" badge and a SHURU safety stamp on every coin · launch from X and Telegram</p></li>
         <li><span>S4 · NEON (planned)</span><p>TORAMARU trades signed in your own wallet · recurring buys, limit and take-profit orders · an opt-in agent wallet with spending limits · PYON autopilot and wallet protection alerts for holders</p></li>
@@ -321,7 +321,7 @@
         <li class="done"><span>完成済み</span><p>MEKANEKO WORLD とフィルム · リアルタイムデータで動くエージェントコンソール · Nekopult の画面（デモデータ） · Robinhood Chain への接続とウォレット接続</p></li>
         <li class="now"><span>S0 · BOOT（現在）</span><p>15体すべてのエージェントがウェブと Discord で稼働中（1日の無料質問つき） · Discord コミュニティと Telegram チャンネル · 公式 X アカウント · GitHub の公開リポジトリ · ステータスと検証のページ · アプリへのより速い入り口 · 利用規約と法的レビュー</p></li>
         <li><span>S1 · VOLT（ローンチ）</span><p>Robinhood Chain の Pons で $MEKANEKO をフェアローンチ。コントラクトアドレスはウェブ、X、Discord、Telegram に同時に表示されます · 資金を動かせない署名によるウォレットログイン · 100 $MEKANEKO 以上のホルダーはエージェントへの質問枠が増加 · SHURU のコントラクトチェックと KOKEKO のアラートチャンネル</p></li>
-        <li><span>S2 · MUSEUM（ローンチと同時、またはその直後）</span><p>すべてのエージェントがフルツールと自分の話し方で稼働 · The Record：各エージェントの判断を記録する公開の成績表 · MEKANEKO WORLD のミュージアムのプレートにリアルタイムの数字</p></li>
+        <li><span>S2 · MUSEUM（ローンチと同時、またはその直後）</span><p>すべてのエージェントがフルツールと自分の話し方で稼働 · <a href="/ja/record/">The Record</a>：各エージェントの判断を記録する公開の成績表、すべてに署名つきレシート（KOKEKO と SHURU は稼働中） · MEKANEKO WORLD のミュージアムのプレートにリアルタイムの数字</p></li>
         <li class="gate"><span>ゲート · Nekopult の監査レポート公開</span></li>
         <li><span>S3 · MONUMENT（計画）</span><p>Nekopult v1 稼働：1回のトランザクションでコインをローンチ · 取引手数料は自動で集計され、クリエイターはクリエイターデスクから受け取り · すべてのコインに「Born on Nekopult」バッジと SHURU の安全スタンプ · X と Telegram からローンチ</p></li>
         <li><span>S4 · NEON（計画）</span><p>TORAMARU の取引をあなた自身のウォレットで署名 · 定期購入、指値、利確注文 · 支出上限つきのエージェントウォレット（任意） · PYON のオートパイロットとホルダー向けのウォレット保護アラート</p></li>
@@ -390,6 +390,7 @@
       row('GitHub', c.githubUrl || soon, c.githubUrl),
       row(MK.t('Status', 'ステータス'), location.origin + `/${MK.lang}/status/`, `/${MK.lang}/status/`),
       row(MK.t('Verify', '検証'), location.origin + `/${MK.lang}/verify/`, `/${MK.lang}/verify/`),
+      row('The Record', location.origin + `/${MK.lang}/record/`, `/${MK.lang}/record/`),
       row(`${MK.t('Contract', 'コントラクト')} · $MEKANEKO${c.chain ? ' · ' + c.chain : ''}`, c.ca || soon, c.ca ? `https://robinhoodchain.blockscout.com/token/${c.ca}` : ''),
     ].join(''); });
     // highlight the section in view in the contents list

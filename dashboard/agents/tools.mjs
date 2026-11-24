@@ -103,7 +103,7 @@ export const TOOLS = {
   gate_check: {                                                           // SHURU: the Gate, ported from Troya Agent (MIT), see gate/robinhood.mjs
     def: { name: 'gate_check', description: 'The Gate: the full pre-trade check of a Robinhood Chain token, the same one a buy would get. Route (Pons curve or Uniswap), price impact, pool depth, fees and taxes, a simulated buy, a simulated sell back, transfer tax, plus contract red flags (mint, pause, blacklist, fee or limit setters, owner, proxy). Read-only: nothing is signed or sent. Use it before any "is it safe to buy" answer.',
       input_schema: S({ token: address, amount_eth: { type: 'number', description: 'buy size to test, in ETH (default 0.01, at most 5)' } }, ['token']) },
-    async run({ token, amount_eth = 0.01 }) {
+    async run({ token, amount_eth = 0.01 }, ctx = {}) {
       const g = await import('./gate/robinhood.mjs');
       const amt = String(Math.min(5, Math.max(0.0001, Number(amount_eth) || 0.01)));
       const [gate, health] = await Promise.all([
@@ -111,10 +111,17 @@ export const TOOLS = {
         g.tokenHealth(token).catch((e) => ({ error: e.message })),
       ]);
       const worst = (gate.checks || []).some((c) => c.status === 'fail') ? 'fail' : (gate.checks || []).some((c) => c.status === 'warn') ? 'warn' : gate.checks ? 'pass' : 'unknown';
+      // The Record + the Seal: every check gets a signed receipt; the first verdict per agent, token and day is graded 24 h later
+      const R = await import('./gate/record.mjs');
+      const noted = await R.noteVerdict({ agent: ctx.agent || 'shuru', token, symbol: gate.quote?.tokenOut?.symbol || null, worst, source: ctx.source || 'web',
+        gate: { tested_buy_eth: Number(amt), gate_passed: gate.pass ?? null, checks: (gate.checks || []).map((c) => [c.key || c.name || c.label || '', c.status]), risk: health.risk ?? null } }).catch(() => null);
+      const receipt = noted?.receipt ? { hash: noted.receipt, url: `https://app.mekaneko.com/${ctx.lang === 'ja' ? 'ja' : 'en'}/record/?r=${noted.receipt}`, graded_tomorrow: !!noted.graded } : null;
       return { source: 'MEKANEKO Gate on Robinhood Chain RPC (eth_call simulations; ported from Troya Agent, MIT)', tested_buy_eth: Number(amt),
         gate_passed: gate.pass ?? null, worst_check: worst, route: gate.quote?.route?.label || null, venue: gate.quote?.venue || null,
         checks: gate.checks || [], gate_error: gate.error || null, health: health.error ? { error: health.error } : { risk: health.risk, flags: health.flags, proxy: health.proxy || null },
-        reading_guide: 'fail = DANGER, warn = CAUTION, all pass = SAFE (for this size, right now). Health flags add context; "skip" means not measurable.' };
+        reading_guide: 'fail = DANGER, warn = CAUTION, all pass = SAFE (for this size, right now). Health flags add context; "skip" means not measurable.'
+          + (receipt ? ` This check has a signed receipt in the Seal (end your answer with the receipt link). ${receipt.graded_tomorrow ? 'This verdict is graded in public on The Record 24 hours from now.' : 'The first verdict on this token today is the one The Record grades.'}` : ''),
+        receipt };
     } },
   service_status: {                                                       // GYUDON: the same checks as the public status page (/status)
     def: { name: 'service_status', description: 'MEKANEKO status right now, the same checks as the public status page: Robinhood Chain RPC health and response time, the market data feed (GeckoTerminal), and the agents. Use it for "is X down?" questions.', input_schema: S({}) },
