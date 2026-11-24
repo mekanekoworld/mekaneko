@@ -24,13 +24,14 @@
   };
   const TOOLS = {
     ryujin: ['All 14 agents', 'Robinhood Chain market data', 'Web search'], nezu: ['Robinhood Chain pools (GeckoTerminal)', 'Token search (DexScreener)', 'Web search'],
-    konkon: ['Robinhood Chain market data', 'Web search'], shuru: ['Robinhood Chain RPC (contract reads)', 'DexScreener', 'Web search'],
+    konkon: ['Robinhood Chain market data', 'Web search'], shuru: ['The Gate (simulated buy and sell)', 'Watchfire (whale alerts)', 'Robinhood Chain RPC (contract reads)', 'DexScreener', 'Web search'],
     nishiki: ['Nekopult launch drafts', 'Ticker check (DexScreener)', 'Web search'], chototsu: ['Web search', 'Market data'], meemee: ['Web search'],
-    kokeko: ['Web search', 'Watchlist'], toramaru: ['Live prices & liquidity', 'Wallet balances', 'Trade preview'], kaeru: ['Wallet balances (RPC)', 'Live prices'],
+    kokeko: ['Sentry (new Pons coins)', 'Watchfire (whale alerts)', 'Web search', 'Watchlist'], toramaru: ['The Gate (simulated buy and sell)', 'Live prices & liquidity', 'Wallet balances', 'Trade preview'], kaeru: ['Wallet balances (RPC)', 'Live prices'],
     pyon: ['Watchlist rules', 'Live prices'], gyudon: ['Robinhood Chain RPC'], hayate: ['Web search', 'Robinhood Chain RPC'], ukki: ['Code sandbox'], hachi: ['Web search', 'Chain status'],
   };
   const TOOL_LABEL = {
     web_search: ['Searching the web', 'ウェブ検索'], web_fetch: ['Reading a page', 'ページを読む'], code_execution: ['Running code', 'コード実行'],
+    gate_check: ['Running the Gate', 'Gate チェック'], service_status: ['Checking MEKANEKO status', 'ステータス確認'],
     chain_status: ['Checking Robinhood Chain', 'チェーン確認'], token_onchain: ['Reading the contract', 'コントラクト確認'], wallet_balances: ['Reading the wallet', 'ウォレット確認'],
     market_trending: ['Trending pools', 'トレンドのプール'], market_new_pools: ['New pools', '新しいプール'], market_token: ['Market data', 'マーケットデータ'],
     market_search: ['Searching tokens', 'トークン検索'], nekopult_tokens: ['Checking Nekopult', 'Nekopult 確認'], nekopult_prepare_launch: ['Preparing launch draft', 'ローンチ下書き'],
@@ -74,6 +75,16 @@
       const d = c.draft;
       return `<div class="card"><h4>${t('Launch draft ready', 'ローンチ下書き完成')}</h4><div class="big">${esc(d.name)} <span class="muted">$${esc(d.ticker)}</span></div>
         <p class="muted">${esc(d.description || '')}</p><div class="row"><a class="btn btn--key" href="${esc(c.url)}">${t('Open in Nekopult', 'Nekopult で開く')}</a></div></div>`;
+    }
+    if (c.kind === 'verdict' && /^(SAFE|CAUTION|DANGER)$/.test(c.verdict)) {
+      const v = c.verdict, mean = { SAFE: t('The Gate passed for a small buy right now.', '少額の購入なら、いま Gate を通過しています。'),
+        CAUTION: t('The Gate passed with warnings. Read them before you buy.', '警告つきで Gate を通過。購入前に確認してください。'), DANGER: t('The Gate failed. Do not buy without checking it yourself.', 'Gate 不合格。自分で確かめずに買わないでください。') }[v];
+      const wf = c.watchfire === 'fire' || c.watchfire === 'red' ? `<p class="warn">Watchfire: ${esc(c.watchfire_why || c.watchfire)}</p>` : '';
+      return `<div class="card card--verdict"><img class="hanko" src="/mekaneko/hanko/${v.toLowerCase()}.webp" alt="SHURU ${v}" width="112" height="112" loading="lazy">
+        <div class="vd"><h4>${t('SHURU · Gate check', 'SHURU · Gate チェック')}</h4><div class="big">${v}${c.symbol ? ` · $${esc(c.symbol)}` : ''}</div><p class="muted">${mean}</p>${wf}
+        <div class="row"><a class="btn" href="/${MK.lang}/record/?r=${esc(c.receipt)}">${t('Signed receipt', '署名つきレシート')}</a>
+        <a class="btn" href="https://robinhoodchain.blockscout.com/token/${esc(c.token)}" target="_blank" rel="noopener">${t('Token', 'トークン')} ↗</a></div>
+        <p class="muted small">${c.graded ? t('This verdict is graded in public on The Record in 24 hours.', 'この判定は24時間後に The Record で公開採点されます。') : t('The first verdict on this token today is the one The Record grades.', 'The Record が採点するのは、このトークンへの今日最初の判定です。')}</p></div></div>`;
     }
     if (c.kind === 'trade') {
       return `<div class="card"><h4>${t('Trade preview', 'トレードプレビュー')}</h4><div class="big">${c.side === 'buy' ? t('Buy', '購入') : t('Sell', '売却')} ${esc(c.symbol)}</div>

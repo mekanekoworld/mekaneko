@@ -93,3 +93,12 @@
   .ag-form { margin: 0 1.2rem; } .ag-note { margin: .6rem 1.2rem 1rem; }
   .msg--agent { grid-template-columns: 1fr; } .msg--agent > img { display: none; }
 }
+
+/* SHURU's verdict card: the hanko stamp, only on a real Gate check with a Seal receipt */
+.card--verdict { grid-template-columns: auto 1fr; align-items: center; gap: 1.6rem; }
+.card--verdict .hanko { width: 11.2rem; height: 11.2rem; transform: rotate(-8deg); filter: drop-shadow(0 .2rem .6rem rgba(0, 0, 0, .5)); }
+.card--verdict .vd { display: grid; gap: .8rem; min-width: 0; }
+.card--verdict p { margin: 0; }
+.card--verdict .small { font-size: 1.25rem; }
+.card--verdict .warn { color: #ff8a00; font-weight: 600; }
+@media (max-width: 440px) { .card--verdict { grid-template-columns: 1fr; justify-items: start; } .card--verdict .hanko { width: 8.8rem; height: 8.8rem; } }

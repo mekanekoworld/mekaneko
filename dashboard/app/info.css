@@ -65,3 +65,6 @@
   font: 1.3rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; resize: vertical; }
 .rec-verify .out { color: var(--ink-2); font-size: 1.4rem; }
 @media (max-width: 560px) { .rec-cards { grid-template-columns: 1fr; } .rec-big b { font-size: 3.6rem; } }
+.rec-hanko { display: inline-block; vertical-align: middle; margin-right: .6rem; transform: rotate(-8deg); }
+.rec-stamp { grid-column: 1 / -1; }
+.rec-stamp .rec-hanko { width: 12rem; height: 12rem; margin: 0 0 .4rem; }

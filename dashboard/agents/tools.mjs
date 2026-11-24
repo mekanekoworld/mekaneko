@@ -117,6 +117,11 @@ export const TOOLS = {
       const R = await import('./gate/record.mjs');
       const noted = await R.noteVerdict({ agent: ctx.agent || 'shuru', token, symbol: gate.quote?.tokenOut?.symbol || null, worst, source: ctx.source || 'web',
         gate: { tested_buy_eth: Number(amt), gate_passed: gate.pass ?? null, checks: (gate.checks || []).map((c) => [c.key || c.name || c.label || '', c.status]), risk: health.risk ?? null } }).catch(() => null);
+      const verdict = worst === 'fail' ? 'DANGER' : worst === 'warn' ? 'CAUTION' : worst === 'pass' ? 'SAFE' : null;
+      const symbol = gate.quote?.tokenOut?.symbol || watchfire?.symbol || null;
+      // the SHURU stamp (hanko) only ever appears on a real Gate check that has a Seal receipt
+      if (verdict && noted?.receipt) ctx.emit?.({ kind: 'verdict', verdict, token, symbol, receipt: noted.receipt, graded: !!noted.graded,
+        watchfire: watchfire?.level || null, watchfire_why: (watchfire?.why || [])[0] || null });
       const receipt = noted?.receipt ? { hash: noted.receipt, url: `https://app.mekaneko.com/${ctx.lang === 'ja' ? 'ja' : 'en'}/record/?r=${noted.receipt}`, graded_tomorrow: !!noted.graded } : null;
       return { source: 'MEKANEKO Gate on Robinhood Chain RPC (eth_call simulations; ported from Troya Agent, MIT)', tested_buy_eth: Number(amt),
         gate_passed: gate.pass ?? null, worst_check: worst, route: gate.quote?.route?.label || null, venue: gate.quote?.venue || null,
@@ -124,7 +129,7 @@ export const TOOLS = {
         watchfire: watchfire ? { level: watchfire.level, why: watchfire.why, last_fire: watchfire.lastFire || null, top_holders: watchfire.top || [], note: watchfire.note } : { level: 'unavailable' }, health: health.error ? { error: health.error } : { risk: health.risk, flags: health.flags, proxy: health.proxy || null },
         reading_guide: 'fail = DANGER, warn = CAUTION, all pass = SAFE (for this size, right now). Health flags add context; "skip" means not measurable. Watchfire: fire (a whale sale or wallets gathering coins in the last 10 minutes) or red (holders selling fast) must be named in the answer as a strong warning even when the Gate passes; amber means weight in few hands.'
           + (receipt ? ` This check has a signed receipt in the Seal (end your answer with the receipt link). ${receipt.graded_tomorrow ? 'This verdict is graded in public on The Record 24 hours from now.' : 'The first verdict on this token today is the one The Record grades.'}` : ''),
-        receipt };
+        verdict, symbol, receipt };
     } },
   service_status: {                                                       // GYUDON: the same checks as the public status page (/status)
     def: { name: 'service_status', description: 'MEKANEKO status right now, the same checks as the public status page: Robinhood Chain RPC health and response time, the market data feed (GeckoTerminal), and the agents. Use it for "is X down?" questions.', input_schema: S({}) },

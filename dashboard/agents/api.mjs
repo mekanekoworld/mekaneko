@@ -208,6 +208,13 @@ export async function handle(req, res, url, siteRoot) {
       const d = all[url.searchParams.get('id') || '']; return d ? json(res, 200, d) : json(res, 404, { error: 'draft not found' });
     }
     if (p === '/api/agents/chat' && req.method === 'POST') return chat(req, res, siteRoot);
+    // Discord /check: SHURU's full Gate check with a receipt, for our own bot only
+    if (p === '/api/shuru/check' && req.method === 'POST') {
+      if (!isInternal(req)) return json(res, 403, { error: 'forbidden' });
+      let b; try { b = JSON.parse(await readBody(req)); } catch { return json(res, 400, { error: 'bad json' }); }
+      if (!/^0x[0-9a-fA-F]{40}$/.test(String(b.token || ''))) return json(res, 400, { error: 'token required' });
+      return json(res, 200, await TOOLS.gate_check.run({ token: b.token }, { agent: 'shuru', source: 'discord', lang: 'en' }));
+    }
     if (p.startsWith('/api/record') || p.startsWith('/api/seal') || p.startsWith('/api/watchfire')) {
       ledger.site(siteRoot);
       let body = null;

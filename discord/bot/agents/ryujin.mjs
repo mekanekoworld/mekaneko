@@ -48,6 +48,16 @@ export async function streamAnswer(res, on) {
 const step = (t) => (t.name === 'ask_agent' ? `asking ${t.label || 'an agent'}` : t.name === 'web_search' ? 'searching the web'
   : t.name === 'web_fetch' ? 'reading a page' : t.name.replace(/_/g, ' '));
 
+// SHURU's stamp (hanko): only on a real Gate check, linked to its signed receipt on The Record
+const V_COLOR = { SAFE: 0x3DDC84, CAUTION: 0xF5B342, DANGER: 0xFF5D5D };
+export function verdictEmbed(c) {
+  const wf = c.watchfire === 'fire' || c.watchfire === 'red' ? `\n⚠️ Watchfire: ${c.watchfire_why || c.watchfire}` : '';
+  return { color: V_COLOR[c.verdict] || 0x2BD9A0, title: `🐍 SHURU · ${c.verdict}${c.symbol ? ` · $${c.symbol}` : ''}`.slice(0, 250),
+    url: `https://app.mekaneko.com/en/record/?r=${c.receipt}`, thumbnail: { url: `https://app.mekaneko.com/mekaneko/hanko/${String(c.verdict).toLowerCase()}.png` },
+    description: `Gate check on \`${c.token}\`, with a [signed receipt](https://app.mekaneko.com/en/record/?r=${c.receipt}).${wf}\n`
+      + (c.graded ? 'Graded in public on The Record in 24 hours.' : 'The first verdict on this token today is the one The Record grades.') };
+}
+
 async function ask(it, ctx) {
   const question = it.options.getString('question', true).trim().slice(0, 1500);
   const ja = /^ja/.test(it.locale || '');
@@ -68,7 +78,7 @@ async function ask(it, ctx) {
     return it.editReply({ content: `🐉 ${j.error || `Something went wrong (HTTP ${res.status}). Try again later.`}`, allowedMentions: NONE });
   }
   const head = `> ${question.replace(/\n+/g, ' ').slice(0, 300)}\n`;
-  let text = '', steps = [], left = null, limit = null, error = null, last = 0;
+  let text = '', steps = [], left = null, limit = null, error = null, last = 0, verdicts = [];
   const progress = () => {
     const doing = steps.length ? ` (${[...new Set(steps)].slice(-3).join(', ')})` : '';
     const body = text ? `${text.slice(-1500)}\n\n-# 🐉 still writing${doing}…` : `🐉 Thinking${doing}…`;
@@ -78,6 +88,7 @@ async function ask(it, ctx) {
     await streamAnswer(res, async (ev, d) => {
       if (ev === 'text') text += d.d || '';
       else if (ev === 'tool' && d.state === 'start') steps.push(step(d));
+      else if (ev === 'card' && d.kind === 'verdict') verdicts.push(d);
       else if (ev === 'done') { left = d.left; limit = d.limit; }
       else if (ev === 'error') error = d.message;
       if (Date.now() - last > EDIT_EVERY) { last = Date.now(); await it.editReply(progress()).catch(() => {}); }
@@ -91,8 +102,9 @@ async function ask(it, ctx) {
   const shown = all.slice(0, MAX_PARTS);
   if (all.length > MAX_PARTS) shown[MAX_PARTS - 1] += '\n\n… (the answer was too long for Discord; ask a narrower question for the rest)';
   shown[shown.length - 1] += foot;
-  await it.editReply({ content: head + shown[0], allowedMentions: NONE });
-  for (const p of shown.slice(1)) await it.followUp({ content: p, allowedMentions: NONE });
+  const embeds = verdicts.slice(0, 3).map(verdictEmbed);
+  await it.editReply({ content: head + shown[0], allowedMentions: NONE, ...(shown.length === 1 && embeds.length ? { embeds } : {}) });
+  for (const [i, p] of shown.slice(1).entries()) await it.followUp({ content: p, allowedMentions: NONE, ...(i === shown.length - 2 && embeds.length ? { embeds } : {}) });
 }
 
 export default {

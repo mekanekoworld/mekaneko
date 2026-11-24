@@ -42,7 +42,8 @@
     return ({ win: chip('good', t('Win', '勝ち')), miss: chip('bad', t('Miss', '負け')), held: chip('good', t('Held up', '持ちこたえた')), failed: chip('bad', t('Failed', '外れ')),
       collapsed: chip('warn', t('Collapsed', '暴落')), standing: chip('wait', t('Still standing', '下落せず')) })[c.result] || chip('wait', c.result || '—');
   }
-  const verdictChip = (v) => (v === 'SAFE' ? chip('good', 'SAFE') : v === 'CAUTION' ? chip('warn', 'CAUTION') : v === 'DANGER' ? chip('bad', 'DANGER') : chip('wait', '—'));
+  const stamp = (v, s) => (/^(SAFE|CAUTION|DANGER)$/.test(v) ? `<img class="rec-hanko" src="/mekaneko/hanko/${v.toLowerCase()}.webp" alt="SHURU ${v}" width="${s}" height="${s}" loading="lazy">` : '');
+  const verdictChip = (v) => stamp(v, 36) + (v === 'SAFE' ? chip('good', 'SAFE') : v === 'CAUTION' ? chip('warn', 'CAUTION') : v === 'DANGER' ? chip('bad', 'DANGER') : chip('wait', '—'));
   const later = (c) => (c.status === 'watching' ? pc(c.changeNow) + ` <span class="dim">${t('now', '現在')}</span>` : pc(c.change24h));
   const rate = (r) => (r == null ? '—' : `${nf(r * 100, 0)}%`);
   const stat = (k, v) => `<div><dt>${k}</dt><dd>${v}</dd></div>`;
@@ -103,7 +104,7 @@
       const owner = data && [...data.calls, ...data.verdicts].find((c) => c.receipts?.includes(r.hash));
       const what = owner ? (owner.kind === 'call' ? t(`${name(owner.agent)}’s Sentry call on ${owner.symbol ? '$' + owner.symbol : short(owner.token)}`, `${name(owner.agent)} の Sentry 投稿：${owner.symbol ? '$' + owner.symbol : short(owner.token)}`)
         : t(`${name(owner.agent)}’s ${owner.verdict} verdict on ${owner.symbol ? '$' + owner.symbol : short(owner.token)}`, `${name(owner.agent)} の判定 ${owner.verdict}：${owner.symbol ? '$' + owner.symbol : short(owner.token)}`)) : '';
-      $('rcReceipt').innerHTML = `<section class="info-card"><h2>${t('Receipt', 'レシート')} #${nf(r.seq, 0)} · ${esc(KIND[r.kind] || r.kind)}</h2>${check.valid ? chip('good', t('Valid', '有効')) : chip('bad', t('Not valid', '無効'))}
+      $('rcReceipt').innerHTML = `<section class="info-card">${owner?.verdict ? `<div class="rec-stamp">${stamp(owner.verdict, 120)}</div>` : ''}<h2>${t('Receipt', 'レシート')} #${nf(r.seq, 0)} · ${esc(KIND[r.kind] || r.kind)}</h2>${check.valid ? chip('good', t('Valid', '有効')) : chip('bad', t('Not valid', '無効'))}
         <p>${what ? esc(what) + ' · ' : ''}${esc(new Date(r.at).toISOString().slice(0, 19).replace('T', ' '))} UTC · ${t('subject', '対象')} <a href="${EXP}/token/${esc(r.subject)}" target="_blank" rel="noopener" class="mono">${esc(short(r.subject))}</a>${owner ? ' · ' + result(owner) : ''}</p>
         ${checks(check)}<p class="mono">${esc(r.hash)}</p>
         <details style="grid-column:1/-1"><summary>${t('The receipt (JSON)', 'レシート（JSON）')}</summary><p class="mono">${esc(JSON.stringify(r))}</p></details></section>`;
